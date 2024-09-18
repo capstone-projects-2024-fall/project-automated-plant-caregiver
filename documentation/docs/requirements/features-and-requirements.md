@@ -10,6 +10,8 @@ sidebar_position: 4
 - Capability to care of plants based on a set of data
   - Given calculations the sensors automatically take care of the plant with those settings
 - Register&Login (Save presets for plants)
+  -When a user makes an account for the first time they are taken through a guide on how to use the app
+  If a user just logins in again the guide is skipped, however the guide is always available from the settings menu for the user to view.
   - Login info is saved to save preset data calculations for specific plants and can be reused so the user does not have to input the same calculations for multiple plants
   - Able to login from different devices and data is saved on the cloud
 - Customizable and AI calculations for specified plant
