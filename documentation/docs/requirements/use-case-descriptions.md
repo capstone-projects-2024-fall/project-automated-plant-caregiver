@@ -7,8 +7,11 @@ sidebar_position: 5
 ### A user wants to keep plants watered while away on vacation
 - User opens the app
 - User selects the plants that they wish to water
+- User receives a notification that watering basin is low
+- User refills water basin
 - App takes data from the soil monitors
 - Water is distributed to plants based on the dryness of the soil
+- User receives notification when plant is finished being watered
 
 ## Case 2
 ### A user has plants that need to be kept under light for a certain amount of time
@@ -17,6 +20,8 @@ sidebar_position: 5
 - User enters in the amount of time that the lights should be on for
 - Or user selects the type of plant and amount of time recommenced is automatically entered
 - App then turns on and off the lights as needed
+- Light sensitivity is adjusted based on the plants needs
+- User receives notification when lights are adjusted
 
 
 ## Case 3 
