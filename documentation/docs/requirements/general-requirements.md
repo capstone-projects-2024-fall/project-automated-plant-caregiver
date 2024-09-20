@@ -4,6 +4,16 @@ sidebar_position: 3
 
 # General Requirements
 - Web browser access
-- Android App
 - Plant
 - Water
+## Hardware Requirements
+- ESP32
+- Adafruit STEMMA Soil Sensor - I2C Capacitive Moisture Sensor
+- BH1750 Light Sensor
+- AM2320 Digital Temperature and Humidity Sensor
+- Submersible 3V DC Water Pump - 1 Meter Vertical Type
+- Smart LED Light
+## Software Requirements
+- Web Browser Access
+- AWS Amplify Gen 2 Instances
+
