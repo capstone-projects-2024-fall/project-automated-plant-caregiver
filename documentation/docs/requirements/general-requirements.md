@@ -3,7 +3,6 @@ sidebar_position: 3
 ---
 
 # General Requirements
-- Web browser access
 - Plant
 - Water
 ## Hardware Requirements
