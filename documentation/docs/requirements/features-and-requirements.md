@@ -3,9 +3,9 @@ sidebar_position: 4
 ---
 
 # Functional Requirements
-## Pot to make automation possible
+## Pot to Hold Plant
 -   Able to hold an indoor plant
--   Holds Requiree Hardware in order to automate
+-   Holds Required Hardware in order to automate
 ## Remote Control of System
 -   Web page so it is accessible on any device with access to the web
 -   Able to control moisture, light, humidity, and temperature
