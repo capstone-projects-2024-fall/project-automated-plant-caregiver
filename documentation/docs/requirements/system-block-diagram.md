@@ -3,4 +3,4 @@ sidebar_position: 2
 ---
 
 # System Block Diagram
-![image](https://github.com/user-attachments/assets/13d84dd9-be57-4bc3-a7e0-281c8d4f0045)
+![Automated Plant Project](https://github.com/user-attachments/assets/0ddf1f0c-25ce-4e68-8566-71b157843e82)
