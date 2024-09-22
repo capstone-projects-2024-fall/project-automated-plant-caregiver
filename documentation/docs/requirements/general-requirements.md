@@ -11,7 +11,7 @@ sidebar_position: 3
 - BH1750 Light Sensor
 - AM2320 Digital Temperature and Humidity Sensor
 - Submersible 3V DC Water Pump - 1 Meter Vertical Type
-- Smart LED Light
+- LIFX Color A19 800 lumens
 ## Software Requirements
 - Web Browser Access
 - AWS Amplify Gen 2 Instances
