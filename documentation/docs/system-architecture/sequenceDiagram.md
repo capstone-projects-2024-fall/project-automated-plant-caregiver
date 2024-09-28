@@ -163,6 +163,7 @@ A user wants to custom schedule for taking care of a specific plant
 
 ```mermaid
 sequenceDiagram
+    actor User
     User ->> App: Opens application
     User ->> App: Select plant from database selection
     App ->> Database: Retrieve plant data, schedule care
@@ -187,6 +188,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
+    actor User
     User ->> App: Opens application
     User ->> App: Group plants of the same type together
     App ->> Database: Group plants and apply care settings
