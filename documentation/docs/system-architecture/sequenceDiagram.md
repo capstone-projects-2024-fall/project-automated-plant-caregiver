@@ -76,6 +76,59 @@ Pot -->> App: sends a response when the lighting is done
   6. App sends a message to the light controller in the pot to turn on and off as needed
   7. Notification is sent to user when the lighting cycle is complete
 
+
+## Use Case 5
+### A user wants to keep the plant safe from the outside environment
+```mermaid
+sequenceDiagram
+    actor User
+    participant WebApplication
+    participant PageDisplay
+    participant TutorialPage
+    participant Database
+
+    User->>WebApplication: Start app
+    activate WebApplication
+    WebApplication->>PageDisplay: Show FrontPage
+    deactivate WebApplication
+    activate PageDisplay
+    PageDisplay-->>User: Display options
+    deactivate PageDisplay
+
+    User->>PageDisplay: Open TutorialPage
+    activate PageDisplay
+    PageDisplay->>TutorialPage: Show tutorial content
+    activate TutorialPage
+    deactivate PageDisplay
+    TutorialPage-->>PageDisplay: Display tutorial information
+    deactivate TutorialPage
+    activate PageDisplay
+    PageDisplay-->> User: Reads Tutorial
+    deactivate PageDisplay
+
+    User->>TutorialPage: Place plant in container
+    activate TutorialPage
+    TutorialPage-->>User: User confirms placement
+    deactivate TutorialPage
+
+
+    User->>PageDisplay: Check plant status remotely
+    activate PageDisplay
+    PageDisplay->>Database: Retrieve plant status
+    deactivate PageDisplay
+    activate Database
+    Database-->>PageDisplay: Send plant status
+    deactivate Database
+    activate PageDisplay
+    PageDisplay-->>User: Provide plant status
+    deactivate PageDisplay
+```
+1. User follows guidelines on how to place plant within container
+2. User places container with plant inside a home or safe space
+3. User can take care of plant remotely while also knowing it’s in a safe place
+
+  
+
 ## Use Case 8 - Changing Care Schedule Based on Seasonal Change
 A user wants to change their plant care schedule due to a seasonal change.
 
