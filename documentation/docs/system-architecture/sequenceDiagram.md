@@ -75,3 +75,53 @@ Pot -->> App: sends a response when the lighting is done
   5. The app sets a schedule to turn on and off the lights
   6. App sends a message to the light controller in the pot to turn on and off as needed
   7. Notification is sent to user when the lighting cycle is complete
+
+## Use Case 8 - Changing Care Schedule Based on Seasonal Change
+A user wants to change their plant care schedule due to a seasonal change.
+
+
+```mermaid
+sequenceDiagram
+    actor User
+    User->>+App: Opens the app
+    User->>App: Inputs current season
+    App->>App: Process season data
+    App->>User: Recommend care adjustments (e.g., less water, more light)
+    User->>App: Approves the changes
+    App->>App: Adjusts care routine based on season and user input
+    App->>-User: Sends updates on water usage, light exposure, etc.
+
+```
+1. The user inputs the current season based on the date.
+2. The app recommends adjustments for plant care, such as less water or more light.
+3. The user checks and approves the changes.
+4. The app adjusts its routine according to the season and user input.
+5. The app provides updates on water usage, light exposure, and other changes.
+
+
+## Use Case 9 - Assisting a Beginner in Plant Care
+A user has never had experience with plant care before and is unsure how to start.
+
+
+    ```mermaid
+   sequenceDiagram
+    actor User
+    activate App
+    User->>App: Opens the app
+    User->>App: Accesses the AI chat box
+   activate AI
+    User->>AI: Enters background information and experience
+    AI->>User: Delivers personalized care plan
+    AI->>User: Provides advice and tips
+   deactivate AI
+    User->>App: Enables notifications
+   deactivate App
+
+   ```
+1. The user opens the app.
+2. The user accesses the AI chat box.
+3. The user enters their background information and any experience with plants to the AI.
+4. The chat delivers a personalized care plan.
+5. The chat also provides advice and tips for plant care.
+6. The user can enable notifications for reminders.
+  
