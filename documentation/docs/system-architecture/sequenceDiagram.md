@@ -50,6 +50,7 @@ deactivate App
   6. The application grabs data provided by the AGIai api on how much the plant should be watered bases on soil readings
   7. Application sets a watering schedule and sends that to the watering device
   8. after watering is complete user receives a notification
+
 ## Use Case 2
 ### A user has plants that need to be kept under light for a certain amount of time
 ```mermaid
@@ -127,7 +128,30 @@ sequenceDiagram
 2. User places container with plant inside a home or safe space
 3. User can take care of plant remotely while also knowing it’s in a safe place
 
-  
+## Use Case 6 - Custom Schedule for Specific Plant
+A user wants to custom schedule for taking care of a specific plant
+
+```mermaid
+sequenceDiagram
+    User ->> App: Opens application
+    User ->> App: Select plant from database selection
+    App ->> Database: Retrieve plant data, schedule care
+    App ->> User: Show visual calendar and schedule care
+    User ->> App: Specify watering, lighting, and control schedule
+    App ->> Database: Save schedule settings
+    App ->> User: Confirm schedule saved
+    App ->> Sensors/Pump: Adjust settings according to schedule
+    Sensors/Pump ->> App: Provide real-time updates via notifications
+    App ->> User: Notify when plant needs care based on schedule
+    User ->> App: Manually override schedule for changes/updates
+```
+
+1. User selects a plant from the database
+2. App shows a visual calendar building a schedule
+3. User specifies the necessary watering, lighting, and control schedule
+4. App saves the schedule and automatically adjusts setting with the specified times
+5. User receives notifications when the plant needs care based on the schedule
+
 
 ## Use Case 8 - Changing Care Schedule Based on Seasonal Change
 ### A user wants to change their plant care schedule due to a seasonal change.
