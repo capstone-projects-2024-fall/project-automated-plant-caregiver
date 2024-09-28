@@ -182,6 +182,26 @@ sequenceDiagram
 4. App saves the schedule and automatically adjusts setting with the specified times
 5. User receives notifications when the plant needs care based on the schedule
 
+## Use Case 7 - Grouping Species Together
+### A user has plants of the same species/type that they want to manage as a group
+
+```mermaid
+sequenceDiagram
+    User ->> App: Opens application
+    User ->> App: Group plants of the same type together
+    App ->> Database: Group plants and apply care settings
+    User ->> App: Set care steps for entire group
+    App ->> Sensors/Pump: Monitor each plant individually
+    Sensors/Pump ->> App: Send real-time updates
+    App ->> User: Notify if any plant needs extra attention in the group
+    User ->> App: Modify care for that specific plant
+```
+
+1. User groups the same type together in the app
+2. User sets common care steps for the entire group
+3. App monitors each plant individually but gives the same settings for whole group
+4. App notifies the user if any plant needs extra attention in the group
+
 
 ## Use Case 8 - Changing Care Schedule Based on Seasonal Change
 ### A user wants to change their plant care schedule due to a seasonal change.
