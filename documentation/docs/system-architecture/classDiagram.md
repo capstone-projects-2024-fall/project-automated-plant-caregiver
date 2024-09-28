@@ -1,27 +1,194 @@
 ---
 sidebar_position: 1
 ---
+# Class Diagram
+```mermaid
+classDiagram
+    class WebApplication {
+        +String appName = "PlantParent"
+        +String version = 1
+        +startApp()
+        +stopApp()
+    }
+    class PageDisplay {
+        +String page
+        +showPage(page: String)
+        +openTutorial()
+    }
+    class FrontPage {
+        +String featuredContent
+        +displayFeaturedContent()
+    }
+    class CalculationsPage {
+        +String plantDetails
+        +List<Float> inputValues
+        +List<Preset> savedPresets
+        +setSettings()
+        +askAI()
+        +loadPresets()
+        +selectPreset(preset: Preset)
+        +displayPresets()
+    }
+    class AIPage {
+        +String aiModel
+        +String userPrompt
+        +String aiResponse
+        +runAIModel()
+        +displayResponse(userPrompt: String): String
+    }
+    class LoginPage {
+        +String username
+        +String password
+        +String email
+        +authenticate()
+        +forgotPassword()
+    }
+    class RegisterPage {
+        +Map<String, String> userDetails
+        +registerUser()
+        +validateInput()
+    }
+    class NavBar {
+        +List<String> menuItems
+        +renderMenu()
+    }
+    class TutorialPage {
+        +String tutorialContent
+        +String tutorialURL
+        +open()
+    }
+    class User {
+        +String username
+        +String password
+        +String email
+        +register()
+        +login()
+        +logout()
+    }
+    class Preset {
+        +String presetName
+        +String createdBy
+        +List<Float> calculationValues
+        +savePreset()
+        +deletePreset()
+    }
+    class Database {
+        +List<User> users
+        +List<Preset> presets
+        +addUser(user: User)
+        +removeUser(user: User)
+        +savePreset(preset: Preset)
+        +loadPresets(username: String): List<Preset>
+    }
+    class HardwareComponent {
+        +String componentName
+        +String componentType
+        +boolean isActive
+        +updateSettings(settings: String)
+        +activate()
+        +deactivate()
+        +getStatus()
+    }
+    class Light {
+        +int brightnessLevel
+        +setBrightness(level: int)
+    }
+    class LightSensor {
+        +float lightIntensity
+        +readLightIntensity(): float
+    }
+    class MoistureSensor {
+        +float moistureLevel
+        +readMoistureLevel(): float
+    }
+    class TemperatureHumiditySensor {
+        +float temperature
+        +float humidity
+        +readTemperature(): float
+        +readHumidity(): float
+    }
+    class WaterPump {
+        +int flowRate
+        +setFlowRate(rate: int)
+    }
+    WebApplication --> PageDisplay
+    WebApplication --> Database
+    PageDisplay <|-- LoginPage
+    PageDisplay <|-- RegisterPage
+    PageDisplay <|-- FrontPage
+    PageDisplay <|-- CalculationsPage
+    PageDisplay <|-- AIPage
+    PageDisplay --> TutorialPage : All Pages have access
+    PageDisplay --> NavBar: All Pages have access
+    CalculationsPage --> Database : Access Presets and Hardware
+    LoginPage --> Database : Access List of Users
+    RegisterPage --> Database: Checks or Adds to List of Users
+    AIPage --> CalculationsPage: Gives Recommendations
+ 
+    Database --> User
+    Database --> Preset
+    Database --> HardwareComponent
+    User "1" --> "0..*" Preset
+    HardwareComponent <|-- Light
+    HardwareComponent <|-- LightSensor
+    HardwareComponent <|-- MoistureSensor
+    HardwareComponent <|-- TemperatureHumiditySensor
+    HardwareComponent <|-- WaterPump
+```
+# Descriptions of Each Class
 
-**Purpose**
+### WebApplication
+Manages the core functionality of the PlantParent app, with features to start and stop the application. It connects to both the page display and the database for managing the system.
 
-The Design Document - Part I Architecture describes the software architecture and how the requirements are mapped into the design. This document will be a combination of diagrams and text that describes what the diagrams are showing.
+### PageDisplay
+Controls the visual interface of the app, displaying different pages such as the front page, calculation settings, AI recommendations, login, and register. It can also open the tutorial.
 
-**Requirements**
+### FrontPage
+Displays the featured content on the application’s homepage, showcasing primary information.
 
-In addition to the general requirements the Design Document - Part I Architecture will contain:
+### CalculationsPage
+Handles settings for plant care, allowing the user to input data, interact with saved presets, and request AI recommendations. It also manages settings for connected hardware.
 
-A description the different components and their interfaces. For example: client, server, database.
+### AIPage
+Manages AI interactions, running the AI model based on user input and providing responses. It connects with the calculations page to give plant care advice.
 
-For each component provide class diagrams showing the classes to be developed (or used) and their relationship.
+### LoginPage
+Authenticates users through their login credentials, with options for password recovery.
 
-Sequence diagrams showing the data flow for _all_ use cases. One sequence diagram corresponds to one use case and different use cases should have different corresponding sequence diagrams.
+### RegisterPage
+Registers new users by collecting and validating their details, and storing them in the database.
 
-Describe algorithms employed in your project, e.g. neural network paradigm, training and training data set, etc.
+### NavBar
+Renders a menu for navigating between the different pages in the application.
 
-If there is a database:
+### TutorialPage
+Displays instructional content, guiding users through app functionality and linking to external tutorials.
 
-Entity-relation diagram.
+### User
+Represents a user of the application, managing registration, login, and logout actions.
 
-Table design.
+### Preset
+Stores preset plant care configurations, allowing users to save and delete personalized settings.
 
-A check list for architecture design is attached here [architecture\_design\_checklist.pdf](https://templeu.instructure.com/courses/106563/files/16928870/download?wrap=1 "architecture_design_checklist.pdf")  and should be used as a guidance.
+### Database
+Stores users, presets, and hardware components, facilitating data retrieval and storage for the application.
+
+### HardwareComponent
+Represents the different hardware devices used in the app, with functionality to activate, deactivate, and update settings.
+
+### Light
+A type of hardware component controlling the brightness level of a light source.
+
+### LightSensor
+A sensor hardware component that reads and returns the light intensity level.
+
+### MoistureSensor
+Reads and returns the soil moisture level for plant care.
+
+### TemperatureHumiditySensor
+Measures and reports the temperature and humidity levels in the environment.
+
+### WaterPump
+A component controlling the water flow rate to manage irrigation for the plants.
+
+
