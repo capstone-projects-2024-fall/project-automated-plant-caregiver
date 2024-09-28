@@ -130,7 +130,7 @@ sequenceDiagram
   
 
 ## Use Case 8 - Changing Care Schedule Based on Seasonal Change
-A user wants to change their plant care schedule due to a seasonal change.
+### A user wants to change their plant care schedule due to a seasonal change.
 
 
 ```mermaid
@@ -153,7 +153,7 @@ sequenceDiagram
 
 
 ## Use Case 9 - Assisting a Beginner in Plant Care
-A user has never had experience with plant care before and is unsure how to start.
+### A user has never had experience with plant care before and is unsure how to start.
 
 
     ```mermaid
