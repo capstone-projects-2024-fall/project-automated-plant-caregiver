@@ -77,6 +77,36 @@ Pot -->> App: sends a response when the lighting is done
   6. App sends a message to the light controller in the pot to turn on and off as needed
   7. Notification is sent to user when the lighting cycle is complete
 
+## Use Case 3
+### A user is unclear on a certain plant type and needs help identifying the plant species growing
+```mermaid
+sequenceDiagram
+    participant User
+    participant MobileApp as Mobile App Interface
+    participant AIIdentifier as AI Identifier
+    participant ImageProcessor as Image Processing 
+    participant PlantDB as API Database (agri1.ai)
+
+    User->>MobileApp: Open App
+    MobileApp-->>User: Display home screen and options
+    User->>MobileApp: Select "Identify Plant AI" Option
+    User->>MobileApp: Upload/Submit Plant Picture
+
+    MobileApp->>AIIdentifier: Send processed Image for identification
+    AIIdentifier->>PlantDB: Query Database with Processed Image Data
+    PlantDB-->>AIIdentifier: Return List of possible plant Species
+    AIIdentifier-->>MobileApp: Send Plant Identification Results!!
+    MobileApp-->>User: Display Identified Plant Species or List of Potential Matches
+    User->>MobileApp: Confirm Identification or Select Most Likely Match
+    User->>MobileApp: Provide Feedback on Accuracy
+    MobileApp-->> AIIdentifier: give feedback for improvement... 
+
+```
+1. User opens the application and is taken to the home screen.
+2. User selects the "Identify Plant AI" option and uploads a plant picture.
+3. The processed image is sent to the AI Identifier for plant identification.
+4. The AI Identifier queries agri1.ai for possible plant matches and identification data.
+5. The app displays the identified plant species, and the user confirms or provides feedback to improve accuracy.
 
 ## Use Case 5
 ### A user wants to keep the plant safe from the outside environment
