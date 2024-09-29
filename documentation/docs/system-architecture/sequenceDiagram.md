@@ -102,12 +102,49 @@ sequenceDiagram
     MobileApp-->> AIIdentifier: give feedback for improvement... 
 
 ```
-1. User opens the application and is taken to the home screen.
-2. User selects the "Identify Plant AI" option and uploads a plant picture.
+1. User opens the app and is taken to the home screen.
+2. User selects the "Help Identifying a Plant? Ask AI!" option and uploads a plant picture.
 3. The processed image is sent to the AI Identifier for plant identification.
-4. The AI Identifier queries agri1.ai for possible plant matches and identification data.
-5. The app displays the identified plant species, and the user confirms or provides feedback to improve accuracy.
+4. The AI Identifier queries agri1.ai database for possible plant matches and identification data.
+5. The app displays the identified plant species. 
+6. The user confirms or provides feedback to improve accuracy.
 
+## Use Case 4
+### A user wants to learn how to take care of plants through the AI
+```mermaid
+sequenceDiagram
+    participant User
+    participant MobileApp as Mobile App Interface
+    participant AIChatbox as AI Chatbox
+    participant AIIdentifier as AI Identifier
+    participant APIDatabase as API Database
+
+    User->>MobileApp: Open the App
+    MobileApp-->>User: Provide camera Setup Instructions
+    User->>MobileApp: Capture Photo Based on the Instructions
+    User->>MobileApp: Attach Photo and Request Plant Identification
+
+    MobileApp->>AIChatbox: send Photo for Plant Identification
+    AIChatbox->>AIIdentifier: Send Plant Care Data
+    AIIdentifier->>APIDatabase: Process Plant Identification and Care Data
+    APIDatabase-->>AIIdentifier: Return Care Instructions
+    AIIdentifier-->>AIChatbox: Send Plant Care Data
+    AIChatbox-->>MobileApp: Display Care Needs (Water, Light, Moisture, etc.)
+
+    User->>MobileApp: Ask Additional Plant Care Questions
+    MobileApp->>AIChatbox: Forward Users Questions
+    AIChatbox-->>MobileApp: Provide Detailed Answers
+    MobileApp-->>User: Display Detailed Answers
+
+    User->>MobileApp: Submit Feedback and Ratings for AI Suggestions
+
+```
+1. User opens the app and follows the camera setup instructions displayed by the app.
+2. The user captures a photo of the plant based on the instructions and submits it for identification.
+3. The mobile app sends the plant photo to the AI Chatbox, which forwards it to the AI Identifier. The AI Identifier processes the image using the API Database and returns the plant care instructions.
+4. The mobile app displays the plant care needs (e.g., water, light, moisture) to the user.
+5. The user asks additional plant care questions, and the AI Chatbox provides detailed answers. The user submits feedback and ratings for the AI's suggestions.
+   
 ## Use Case 5
 ### A user wants to keep the plant safe from the outside environment
 ```mermaid
