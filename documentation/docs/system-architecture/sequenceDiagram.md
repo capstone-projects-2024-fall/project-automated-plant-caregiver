@@ -165,16 +165,19 @@ A user wants to custom schedule for taking care of a specific plant
 sequenceDiagram
     actor User
     User ->> App: Opens application
-    User ->> App: Select plant from database selection
-    App ->> Database: Retrieve plant data, schedule care
-    App ->> User: Show visual calendar and schedule care
-    User ->> App: Specify watering, lighting, and control schedule
-    App ->> Database: Save schedule settings
-    App ->> User: Confirm schedule saved
-    App ->> Sensors/Pump: Adjust settings according to schedule
-    Sensors/Pump ->> App: Provide real-time updates via notifications
-    App ->> User: Notify when plant needs care based on schedule
-    User ->> App: Manually override schedule for changes/updates
+    activate App
+    User ->> App: Selects plant from database
+    App ->> Database: Retrieves plant data
+    Database -->> App: Returns plant data
+    App ->> User: Displays plant care options
+    User ->> App: Specifies watering, lighting schedule
+    App ->> Database: Saves schedule settings
+    Database -->> App: Confirms schedule saved
+    App ->> Sensors/Pump: Adjusts settings according to schedule
+    Sensors/Pump -->> App: Confirms settings adjusted
+    App ->> User: Notifies when care is needed
+    User ->> App: Manually overrides schedule for updates/changes
+    deactivate App
 ```
 
 1. User selects a plant from the database
@@ -183,20 +186,23 @@ sequenceDiagram
 4. App saves the schedule and automatically adjusts setting with the specified times
 5. User receives notifications when the plant needs care based on the schedule
 
-## Use Case 7 - Grouping Species Together
+## Use Case 7 - Grouping Species/Type Together
 ### A user has plants of the same species/type that they want to manage as a group
 
 ```mermaid
 sequenceDiagram
     actor User
     User ->> App: Opens application
-    User ->> App: Group plants of the same type together
-    App ->> Database: Group plants and apply care settings
-    User ->> App: Set care steps for entire group
-    App ->> Sensors/Pump: Monitor each plant individually
-    Sensors/Pump ->> App: Send real-time updates
-    App ->> User: Notify if any plant needs extra attention in the group
-    User ->> App: Modify care for that specific plant
+    activate App
+    User ->> App: Groups plants of same species/type together
+    App ->> Database: Creates group and applies common care settings
+    Database -->> App: Confirms group creation and settings needed
+    User ->> App: Sets care steps for whole group
+    App ->> Sensors/Pump: Monitors each plant individually
+    Sensors/Pump -->> App: Sends real-time updates on plant status
+    App ->> User: Notifies if any plant needs extra attention
+    User ->> App: Modifies care for specific plant as needed
+    deactivate App
 ```
 
 1. User groups the same type together in the app
