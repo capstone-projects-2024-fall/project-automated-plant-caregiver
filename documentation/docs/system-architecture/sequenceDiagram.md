@@ -274,8 +274,7 @@ sequenceDiagram
 ## Use Case 9 - Assisting a Beginner in Plant Care
 ### A user has never had experience with plant care before and is unsure how to start.
 
-
-    ```mermaid
+```mermaid
    sequenceDiagram
     actor User
     activate App
@@ -288,8 +287,8 @@ sequenceDiagram
    deactivate AI
     User->>App: Enables notifications
    deactivate App
+```
 
-   ```
 1. The user opens the app.
 2. The user accesses the AI chat box.
 3. The user enters their background information and any experience with plants to the AI.
