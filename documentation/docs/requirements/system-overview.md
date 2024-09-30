@@ -40,3 +40,8 @@ This project will compare existing open-source projects, like the OpenAg initiat
 - IoT libraries
 - Cloud services (AWS)
 
+## Example Design of Product
+Below is a sample design created using AI software to create a visual of the possible final product, with more updates and fine-tuning to come with design updates.
+
+![image0_0](https://github.com/user-attachments/assets/5995adcd-a03c-4d9a-ab93-44084b5e6620)
+
