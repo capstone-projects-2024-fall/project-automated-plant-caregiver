@@ -4,7 +4,7 @@ info:
   description: API for managing users, presets, hardware components, AI recommendations, and tutorials.
   version: 1.0.0
 servers:
-  - url: https://yourappurl.com/api
+  - url: https://plantparent.com/api
 tags:
   - name: Users
     description: User management
@@ -14,8 +14,7 @@ tags:
     description: Hardware management
   - name: AI
     description: AI recommendations
-  - name: Tutorials
-    description: Tutorial management
+    
 paths:
   /users/register:
     post:
@@ -267,35 +266,6 @@ paths:
                     example: "Based on your inputs, we recommend watering every 3 days."
         '400':
           description: Invalid input
-
-  /tutorials/{tutorialId}:
-    get:
-      tags:
-        - Tutorials
-      summary: Opens a specific tutorial by its ID
-      parameters:
-        - name: tutorialId
-          in: path
-          required: true
-          schema:
-            type: string
-          example: "tutorial123"
-      responses:
-        '200':
-          description: Returns the tutorial content
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  tutorialContent:
-                    type: string
-                    example: "This is how you use the AI recommendations..."
-                  tutorialURL:
-                    type: string
-                    example: "https://tutorial.link"
-        '404':
-          description: Tutorial not found
 
 components:
   securitySchemes:
