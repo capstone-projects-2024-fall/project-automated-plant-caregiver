@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# **PlantParent Unit Test Cases**
+# PlantParent Unit Test Cases
 
 ### 1. **Class: WebApplication**
 #### Method: `startApp()`

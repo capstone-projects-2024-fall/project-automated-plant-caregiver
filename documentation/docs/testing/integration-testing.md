@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# **PlantParent Integration Test Cases**
+# PlantParent Integration Test Cases
 
 ---
 
