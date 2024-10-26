@@ -1,19 +1,16 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Home from './Home';
+import logo from './logo.png';
+
 
 function App() {
   return (
+    
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello, World
-        </p>
-
-      </header>
+      <img src={logo} width={250} height={250} alt="Logo" />
+      <Home />
     </div>
   );
 }
-
-
 export default App;
