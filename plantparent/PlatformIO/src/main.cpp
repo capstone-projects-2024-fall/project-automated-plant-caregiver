@@ -2,12 +2,15 @@
 // #include <Wire.h>        
 // #include <BH1750.h>   
 // #include <ESPAsyncWebServer.h>      
-// #include <WiFi.h>     
+// #include <WiFi.h>    
+// #include <Adafruit_seesaw.h> 
 // // I2C pins
 // #define I2C_SDA 21 
 // #define I2C_SCL 22
 // // Create an instance of the BH1750 sensor
 // BH1750 lightsensor(0x23);
+// // Create an insteance of Soil Moisture Sensor
+// Adafruit_seesaw soilSensor;
 // // Create an instance of the AsyncWebServer
 // AsyncWebServer server(80);
 // // WiFi credentials
@@ -36,12 +39,24 @@
 //   else {
 //     Serial.println("BH1750 Error");
 //   }
-//   // Define API endpoint to get the light sensor data
+//   // Initialize the Soil Moisture Sensor
+//     if (!soilSensor.begin(0x36)) { 
+//         Serial.println("Soil Moisture Sensor not found!");
+//     } else {
+//         Serial.println("Soil Moisture Sensor Enabled");
+//     }   
+//   // Define API endpoint for light sensor data
 //   server.on("/lightsensor", HTTP_GET, [](AsyncWebServerRequest *request) {
 //     float lux = lightsensor.readLightLevel();
-//     String message = String(lux);
-//     // Send the light level in lux as plain text
-//     request->send(200, "text/plain", message);  
+//     String jsonResponse = "{\"lux\": " + String(lux) + "}";
+//     request->send(200, "application/json", jsonResponse);
+//   });
+
+//   // Define API endpoint for soil moisture data
+//   server.on("/soilmoisture", HTTP_GET, [](AsyncWebServerRequest *request) {
+//     uint16_t soil_moisture = soilSensor.touchRead(0);  // Get capacitive moisture reading
+//     String jsonResponse = "{\"soil_moisture\": " + String(soil_moisture) + "}";
+//     request->send(200, "application/json", jsonResponse);
 //   });
 //   // Start the server
 //   server.begin();
@@ -58,6 +73,9 @@
 //     Serial.print(lux);
 //     Serial.println(" lux");
 //   }
+//   uint16_t soil_moisture = soilSensor.touchRead(0);
+//   Serial.print("Soil Moisture Level: ");
+//   Serial.println(soil_moisture);
 //   // Wait for 1 second
 //   delay(1000);
 
