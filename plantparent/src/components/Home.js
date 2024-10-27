@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import fetchSensorData from '../sensorData';  // Import the fetch function
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import './Home.css';
 
 const Home = () => {
@@ -18,19 +17,8 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLoginSuccess = (response) => {
-    console.log("Login Success:", response);
-  };
-
-  const handleLoginFailure = (error) => {
-    console.error("Login Failed:", error);
-  };
-
   return (
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
       <div className='page'>
-          <h1>Welcome to My PlantParent</h1>
-          <p>Automated Help with Your Plants</p>
 
         {/* Display Sensor Data */}
         <section>
@@ -47,7 +35,6 @@ const Home = () => {
         </section>
 
       </div>
-    </GoogleOAuthProvider>
   );
 };
 
