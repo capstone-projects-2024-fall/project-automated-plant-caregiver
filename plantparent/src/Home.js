@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import './Home.css';
 
@@ -9,6 +9,25 @@ const Home = () => {
 
   const handleLoginFailure = (error) => {
     console.error("Login Failed:", error);
+  };
+
+
+  const [sensorData, setSensorData] = useState({ lux: null, soil_moisture: null });
+  const [error, setError] = useState(null);
+
+
+  const fetchSensorData = async () => {
+    try {
+      // Replace with your API Gateway endpoint
+      const response = await fetch('https://your-api-id.execute-api.us-west-2.amazonaws.com/dev/sensors', {
+        method: 'GET',
+      });
+      const data = await response.json();
+      setSensorData(data);
+    } catch (err) {
+      console.error("Failed to fetch sensor data:", err);
+      setError('Failed to load sensor data.');
+    }
   };
 
   return (
@@ -72,6 +91,21 @@ const Home = () => {
             )}
           />
         </section>
+
+        {/* Display Sensor Data */}
+        <section>
+          <h2>Current Plant Sensor Data</h2>
+          {error && <p>{error}</p>}
+          {sensorData.lux !== null && sensorData.soil_moisture !== null ? (
+            <div>
+              <p><strong>Light Level:</strong> {sensorData.lux} lux</p>
+              <p><strong>Soil Moisture:</strong> {sensorData.soil_moisture}</p>
+            </div>
+          ) : (
+            <p>Loading sensor data...</p>
+          )}
+        </section>
+
       </div>
     </GoogleOAuthProvider>
   );
