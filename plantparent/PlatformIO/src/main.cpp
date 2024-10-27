@@ -1,83 +1,92 @@
-// #include <Arduino.h>
-// #include <Wire.h>        
-// #include <BH1750.h>   
-// #include <ESPAsyncWebServer.h>      
-// #include <WiFi.h>    
-// #include <Adafruit_seesaw.h> 
-// // I2C pins
-// #define I2C_SDA 21 
-// #define I2C_SCL 22
-// // Create an instance of the BH1750 sensor
-// BH1750 lightsensor(0x23);
-// // Create an insteance of Soil Moisture Sensor
-// Adafruit_seesaw soilSensor;
-// // Create an instance of the AsyncWebServer
-// AsyncWebServer server(80);
-// // WiFi credentials
-// const char* ssid = "tuguestwireless";
-// const char* password = "";
-// // Setup function
-// void setup() {
-//   // Initialize the Serial Monitor
-//   Serial.begin(115200); 
-//   // Initialize the I2C communication
-//   Wire.begin(I2C_SDA, I2C_SCL); 
-//   // Connect to the Access Point
-//   WiFi.begin(ssid, password); 
-//   // Wait for the connection
-//   while(WiFi.status() != WL_CONNECTED) {
-//     delay(1000);
-//     Serial.println("Connecting to WiFi......");
-//   }
-//   Serial.println("Connected to WiFi");
-//   Serial.println("IP address: ");
-//   Serial.println(WiFi.localIP());
-//   // Initialize the BH1750 sensor
-//   if (lightsensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
-//     Serial.println("BH1750 Enabled");
-//   }
-//   else {
-//     Serial.println("BH1750 Error");
-//   }
-//   // Initialize the Soil Moisture Sensor
-//     if (!soilSensor.begin(0x36)) { 
-//         Serial.println("Soil Moisture Sensor not found!");
-//     } else {
-//         Serial.println("Soil Moisture Sensor Enabled");
-//     }   
-//   // Define API endpoint for light sensor data
-//   server.on("/lightsensor", HTTP_GET, [](AsyncWebServerRequest *request) {
-//     float lux = lightsensor.readLightLevel();
-//     String jsonResponse = "{\"lux\": " + String(lux) + "}";
-//     request->send(200, "application/json", jsonResponse);
-//   });
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <BH1750.h>
+#include <Adafruit_seesaw.h>
+#include <SPIFFS.h>
 
-//   // Define API endpoint for soil moisture data
-//   server.on("/soilmoisture", HTTP_GET, [](AsyncWebServerRequest *request) {
-//     uint16_t soil_moisture = soilSensor.touchRead(0);  // Get capacitive moisture reading
-//     String jsonResponse = "{\"soil_moisture\": " + String(soil_moisture) + "}";
-//     request->send(200, "application/json", jsonResponse);
-//   });
-//   // Start the server
-//   server.begin();
-// }
-// // Loop function
-// void loop() {
-//   // Read the light intensity
-//   float lux = lightsensor.readLightLevel(); 
-//   // Check if the reading is valid and print it
-//   if (lux < 0) {
-//     Serial.println("Error reading light level.");
-//   } else {
-//     Serial.print("Light Level: ");
-//     Serial.print(lux);
-//     Serial.println(" lux");
-//   }
-//   uint16_t soil_moisture = soilSensor.touchRead(0);
-//   Serial.print("Soil Moisture Level: ");
-//   Serial.println(soil_moisture);
-//   // Wait for 1 second
-//   delay(1000);
+// WiFi credentials
+const char* ssid = "BaeBun";            // Replace with your WiFi SSID
+const char* password = "@Ps6b7890";    // Replace with your WiFi password
 
-// }
+// API Gateway endpoint (replace with your actual API Gateway URL)
+const char* serverName = "https://zxk89h80gg.execute-api.us-east-1.amazonaws.com/dev/data";
 
+// Create instances for the sensors
+BH1750 lightsensor(0x23);
+Adafruit_seesaw soilSensor;
+
+void setup() {
+  // Initialize the Serial Monitor
+  Serial.begin(115200);
+
+  // Connect to WiFi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi");
+
+  // Initialize I2C communication for sensors
+  Wire.begin(21, 22); // I2C SDA and SCL pins for ESP32
+
+  // Initialize the BH1750 light sensor
+  if (lightsensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+    Serial.println("BH1750 Enabled");
+  } else {
+    Serial.println("BH1750 Error");
+  }
+
+  // Initialize the soil moisture sensor
+  if (!soilSensor.begin(0x36)) {
+    Serial.println("Soil Moisture Sensor not found!");
+  } else {
+    Serial.println("Soil Moisture Sensor Enabled");
+  }
+}
+
+void loop() {
+  // Read light intensity from the BH1750 sensor
+  float lux = lightsensor.readLightLevel();
+
+  // Read soil moisture level from the soil moisture sensor
+  uint16_t soil_moisture = soilSensor.touchRead(0);
+
+  //Hard code
+  float temp = 25.0;
+
+  // Check if WiFi is connected
+  if (WiFi.status() == WL_CONNECTED) {
+    // Create an HTTPClient object
+    HTTPClient http;
+
+    // Specify the API Gateway URL
+    http.begin(serverName);
+
+    // Set content type to JSON
+    http.addHeader("Content-Type", "application/json");
+
+    // Create a JSON payload with the sensor data
+    String jsonPayload = "{\"lux\": " + String(lux) + ", \"soil_moisture\": " + String(soil_moisture) + ", \"temp\": " + String(temp) + "}";
+
+    // Send an HTTP POST request with the JSON payload
+    int httpResponseCode = http.POST(jsonPayload);
+
+    // Print the HTTP response code and response payload
+    if (httpResponseCode > 0) {
+      String response = http.getString();
+      Serial.println("Response Code: " + String(httpResponseCode));
+      Serial.println("Response: " + response);
+    } else {
+      Serial.println("Error sending data: " + String(httpResponseCode));
+    }
+
+    // End the HTTP connection
+    http.end();
+  } else {
+    Serial.println("WiFi Disconnected");
+  }
+
+  // Delay before the next sensor read and data send
+  delay(5000);  // Send data every 5 seconds (adjust as needed)
+}
