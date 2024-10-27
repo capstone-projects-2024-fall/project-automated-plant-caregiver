@@ -28,16 +28,9 @@ const Home = () => {
 
   return (
     <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-      <div>
-        <header>
+      <div className='page'>
           <h1>Welcome to My PlantParent</h1>
           <p>Automated Help with Your Plants</p>
-        </header>
-
-        <section>
-          <h2>Login or Sign Up</h2>
-
-        </section>
 
         {/* Display Sensor Data */}
         <section>
