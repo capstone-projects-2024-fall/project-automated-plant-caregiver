@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import fetchSensorData from './sensorData';  // Import the fetch function
+import fetchSensorData from '../sensorData';  // Import the fetch function
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import './Home.css';
 
@@ -29,16 +29,6 @@ const Home = () => {
   return (
     <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
       <div>
-        {/* Navigation Bar */}
-        <nav className="navbar">
-          <h1>My PlantParent</h1>
-          <div className="nav-links">
-            <a href="#home">Chat</a>
-            <a href="#about">Plant Module</a>
-            <a href="#contact">Search</a>
-          </div>
-        </nav>
-
         <header>
           <h1>Welcome to My PlantParent</h1>
           <p>Automated Help with Your Plants</p>
