@@ -4,8 +4,9 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 const app = express();
 const port = 3001; 
 
-// Global variable to store the latest sensor reading
+// Global variables to store the latest sensor readings
 let currentLux = 0;
+let currentSoilMoisture = 0;
 
 // Initialize Serial Connection
 async function initializeSerial() {
@@ -17,13 +18,23 @@ async function initializeSerial() {
 
         const parser = serialPort.pipe(new ReadlineParser());
 
+        // Track reading order
+        let readingStep = 'lux'; // Alternate between 'lux' and 'soil'
+
         // Handle incoming data
         parser.on('data', (line) => {
             try {
                 const value = parseFloat(line);
-                if (!isNaN(value) && value >= 0) {
-                    currentLux = value;
-                    console.log(`Updated light level: ${currentLux} lux`);
+                if (!isNaN(value)) {
+                    if (readingStep === 'lux') {
+                        currentLux = value;
+                        console.log(`Updated light level: ${currentLux} lux`);
+                        readingStep = 'soil'; // Next reading is soil moisture
+                    } else {
+                        currentSoilMoisture = value;
+                        console.log(`Updated soil moisture level: ${currentSoilMoisture}`);
+                        readingStep = 'lux'; // Next reading is light level
+                    }
                 }
             } catch (error) {
                 // Skip invalid data
@@ -66,10 +77,12 @@ app.get('/lightsensor', (req, res) => {
     });
 });
 
-// Endpoint for mclass.js functionality
-const mclass = require('./client/src/mclass');
-app.get('/class', (req, res) => {
-    res.json({ message: mclass() });
+// Endpoint for soil moisture sensor data
+app.get('/soilmoisture', (req, res) => {
+    res.json({
+        soilMoisture: currentSoilMoisture,
+        timestamp: Date.now()
+    });
 });
 
 // Start the server and initialize serial connection

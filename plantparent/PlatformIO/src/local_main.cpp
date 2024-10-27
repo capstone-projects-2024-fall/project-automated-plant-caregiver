@@ -24,6 +24,7 @@ void setup() {
   } else {
     Serial.println("BH1750 Error");
   }
+  
   // Initialize Soil Moisture Sensor
   if (!soilSensor.begin(0x36)) { // Default I2C address for Adafruit STEMMA Soil Moisture Sensor
     Serial.println("Soil Moisture Sensor not found!");
@@ -33,19 +34,17 @@ void setup() {
 }
 
 void loop() {
-  // Read and display light level
+  // Read light level
   float lux = lightsensor.readLightLevel();
   if (lux >= 0) {
-    Serial.print("Light Level (lux): ");
-    Serial.println(lux);
+    Serial.println(lux);  // Output only the light level
   } else {
-    Serial.println("Error reading BH1750");
+    Serial.println("-1"); // Output an error indicator if read fails
   }
 
-  // Read and display soil moisture level
-  uint16_t soil_moisture = soilSensor.touchRead(0);  // Reads capacitive touch value for moisture
-  Serial.print("Soil Moisture Level: ");
-  Serial.println(soil_moisture);
+  // Read soil moisture level
+  uint16_t soil_moisture = soilSensor.touchRead(0);
+  Serial.println(soil_moisture);  // Output only the soil moisture level
 
   // Delay between readings
   delay(1000);
