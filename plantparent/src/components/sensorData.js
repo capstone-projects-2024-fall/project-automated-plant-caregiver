@@ -8,16 +8,16 @@ const fetchSensorData = async (setSensorData, setError) => {
           'Content-Type': 'application/json',
         },
       });
-      
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
+  
       const data = await response.json();
       console.log('Received data:', data);
   
-      // Assuming you want the latest entry (last element in the array)
-      const latestData = data[data.length - 1];  // Get the last element of the array
+      // Assuming the most recent data is at index 0
+      const latestData = data[0];  // Get the first element of the array
       setSensorData(latestData);  // Set only the latest data
     } catch (err) {
       console.error("Failed to fetch sensor data:", err);

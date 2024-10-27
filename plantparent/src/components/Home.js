@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import fetchSensorData from '../sensorData';  // Import the fetch function
+import fetchSensorData from './sensorData';  // Import the fetch function
 import './Home.css';
 import plantImg from './plantTest.png'
 import logo from './logo.png'
@@ -56,13 +56,14 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Right Half: Dropdown menu */}
+      {/* Right Half: Dropdown menu commented out for now
       <div className="right-half">
         <select onChange={handleDropdownChange} className="plant-dropdown">
           <option value="0">Plant 1</option>
           <option value="1">Plant 2</option>
         </select>
       </div>
+      */}
     </div>
   );
 };
