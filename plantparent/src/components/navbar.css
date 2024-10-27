@@ -1,0 +1,38 @@
+/* Main Navbar Styles */
+nav {
+    background-color: #2c3e50; /* Darker background color */
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around; /* Space out the nav items */
+    align-items: center;
+}
+
+li {
+    display: inline;
+}
+
+a {
+    color: #ecf0f1; /* Light text color */
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+}
+
+a:hover {
+    color: #1abc9c; /* Accent color on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Styling the logo */
+.logo {
+    height: 50px;  /* Adjust height as needed */
+    margin-right: 20px;  /* Space between logo and nav links */
+}
