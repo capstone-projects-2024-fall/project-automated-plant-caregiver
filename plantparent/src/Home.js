@@ -1,33 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import fetchSensorData from './sensorData';  // Import the fetch function
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import './Home.css';
 
 const Home = () => {
+  const [sensorData, setSensorData] = useState({ lux: null, soil_moisture: null, temp: null });
+  const [error, setError] = useState(null);
+
+  // Fetch sensor data when the component mounts
+  useEffect(() => {
+    fetchSensorData(setSensorData, setError);  // Call the fetch function and pass the state handlers
+
+    // Set up interval to fetch data periodically 
+    const interval = setInterval(() => fetchSensorData(setSensorData, setError), 5000000);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
   const handleLoginSuccess = (response) => {
     console.log("Login Success:", response);
   };
 
   const handleLoginFailure = (error) => {
     console.error("Login Failed:", error);
-  };
-
-
-  const [sensorData, setSensorData] = useState({ lux: null, soil_moisture: null });
-  const [error, setError] = useState(null);
-
-
-  const fetchSensorData = async () => {
-    try {
-      // Replace with your API Gateway endpoint
-      const response = await fetch('https://your-api-id.execute-api.us-west-2.amazonaws.com/dev/sensors', {
-        method: 'GET',
-      });
-      const data = await response.json();
-      setSensorData(data);
-    } catch (err) {
-      console.error("Failed to fetch sensor data:", err);
-      setError('Failed to load sensor data.');
-    }
   };
 
   return (
@@ -37,9 +33,9 @@ const Home = () => {
         <nav className="navbar">
           <h1>My PlantParent</h1>
           <div className="nav-links">
-            <a href="#home">Chat </a>
-            <a href="#about">Plant Module </a>
-            <a href="#contact"> Search </a>
+            <a href="#home">Chat</a>
+            <a href="#about">Plant Module</a>
+            <a href="#contact">Search</a>
           </div>
         </nav>
 
@@ -51,58 +47,19 @@ const Home = () => {
         <section>
           <h2>Login or Sign Up</h2>
 
-          {/* Login Button */}
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginFailure}
-            render={(renderProps) => (
-              <button 
-                className="google-button" 
-                onClick={renderProps.onClick} 
-                disabled={renderProps.disabled}
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt="Google icon"
-                  className="google-icon"
-                />
-                Login with Google
-              </button>
-            )}
-          />
-
-          {/* Sign Up Button */}
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginFailure}
-            render={(renderProps) => (
-              <button 
-                className="google-button" 
-                onClick={renderProps.onClick} 
-                disabled={renderProps.disabled}
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt="Google icon"
-                  className="google-icon"
-                />
-                Sign Up with Google
-              </button>
-            )}
-          />
         </section>
 
         {/* Display Sensor Data */}
         <section>
           <h2>Current Plant Sensor Data</h2>
-          {error && <p>{error}</p>}
-          {sensorData.lux !== null && sensorData.soil_moisture !== null ? (
-            <div>
-              <p><strong>Light Level:</strong> {sensorData.lux} lux</p>
-              <p><strong>Soil Moisture:</strong> {sensorData.soil_moisture}</p>
-            </div>
+          {error ? (
+            <p>{error}</p>
           ) : (
-            <p>Loading sensor data...</p>
+            <>
+              <p><strong>Light Level:</strong> {sensorData.lux !== null ? `${sensorData.lux} lux` : 'Loading...'}</p>
+              <p><strong>Soil Moisture:</strong> {sensorData.soil_moisture !== null ? sensorData.soil_moisture : 'Loading...'}</p>
+              <p><strong>Temperature:</strong> {sensorData.temp !== null ? `${sensorData.temp} °C` : 'Loading...'}</p>
+            </>
           )}
         </section>
 
