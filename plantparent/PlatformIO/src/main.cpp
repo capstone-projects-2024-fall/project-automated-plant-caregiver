@@ -5,8 +5,8 @@
 #include <SPIFFS.h>
 
 // WiFi credentials
-const char* ssid = "BaeBun";            // Replace with your WiFi SSID
-const char* password = "@Ps6b7890";    // Replace with your WiFi password
+const char* ssid = "";            // Replace with your WiFi SSID
+const char* password = "";    // Replace with your WiFi password
 
 // API Gateway endpoint (replace with your actual API Gateway URL)
 const char* serverName = "https://zxk89h80gg.execute-api.us-east-1.amazonaws.com/dev/data";
