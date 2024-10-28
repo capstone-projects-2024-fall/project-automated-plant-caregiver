@@ -29,6 +29,7 @@ const Home = () => {
     // Set up interval to fetch data periodically 
     const interval = setInterval(() => fetchSensorData(setSensorData, setError), 50000000);
 
+
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
