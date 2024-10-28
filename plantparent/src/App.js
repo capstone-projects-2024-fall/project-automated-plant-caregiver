@@ -13,12 +13,13 @@ function App() {
     
     <Router>
       <Navbar />
-      <div style={{ padding: '20px' }}>
+      <div className="main-content"> {}
           <Routes>
-            <Route path ='/' element={<Home/>}/>
-            <Route path ='/Home' element={<Home/>}/>
-            <Route path ='/chat' element={<Chat/>}/>
-            <Route path ='/about' element={<About/>}/>
+            <Route path='/' element={<Landing />} />
+            <Route path='/Home' element={<Home />} />
+            <Route path='/landing' element={<Landing />} />
+            <Route path='/chat' element={<Chat />} />
+            <Route path='/about' element={<About />} />
           </Routes>
       </div>
     </Router>

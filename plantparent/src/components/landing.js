@@ -13,7 +13,7 @@ const handleLoginSuccess = (response) => {
 function Landing() {
     return (
     
-     <div className='page'>
+      <div className='page'>
 
         <h1>Welcome to My PlantParent</h1>
         <p>Automated Help with Your Plants</p>
@@ -41,12 +41,12 @@ function Landing() {
               </button>
             )}
           />
-         
+        
         </section>
 
         <button>Sign Up</button>
         </GoogleOAuthProvider>
-     </div>
+      </div>
     );
   }
   export default Landing;

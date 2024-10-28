@@ -1,38 +1,55 @@
 /* Main Navbar Styles */
 nav {
-    background-color: #2c3e50; /* Darker background color */
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-    justify-content: space-around; /* Space out the nav items */
     align-items: center;
+    justify-content: space-between;
+    background-color: #2c3e50;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-li {
-    display: inline;
+/* Logo Styling */
+.logo {
+    height: 50px;
+    margin-right: 20px;
 }
 
-a {
-    color: #ecf0f1; /* Light text color */
+/* Navbar Links Container */
+.nav-links {
+    display: flex;
+    gap: 20px; /* Space out the links */
+}
+
+/* Link Styling */
+.nav-links a {
+    color: #ecf0f1;
     text-decoration: none;
     font-size: 1.2em;
     font-weight: 500;
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
-a:hover {
-    color: #1abc9c; /* Accent color on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
+.nav-links a:hover {
+    color: #1abc9c;
+    transform: scale(1.05);
 }
 
-/* Styling the logo */
-.logo {
-    height: 50px;  /* Adjust height as needed */
-    margin-right: 20px;  /* Space between logo and nav links */
+/* Responsive Styling */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
 }

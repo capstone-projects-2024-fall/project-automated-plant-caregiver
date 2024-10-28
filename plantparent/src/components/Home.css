@@ -4,6 +4,7 @@
   grid-template-columns: 1fr 1fr; /* Two columns: left half and right half */
   grid-template-rows: 1fr 1fr;    /* Two rows: top half and bottom half */
   height: 100vh;                  /* Full viewport height */
+  margin-top: 20px;
 }
 
 /* Left half: image on top, sensor data below */
@@ -19,7 +20,7 @@
 .image-container {
   width: 100%;        /* Full width of the container */
   max-width: 600px;   /* Set a max width */
-  height: 600px;      /* Fixed height for all images */
+  height: auto;      /* Fixed height for all images */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +30,7 @@
 
 .displayed-image {
   max-width: 100%;    /* Images will scale down to fit the container */
-  max-height: 100%;   /* Ensures image does not exceed container height */
+  max-height: 300px;   /* Ensures image does not exceed container height */
   object-fit: contain;  /* Ensures the entire image fits inside the container without distortion */
 }
 
@@ -66,4 +67,23 @@
 
 .plant-dropdown:focus {
   border-color: #1abc9c;  /* Border color changes on focus */
+}
+
+
+/* Responsive Adjustments for Mobile Devices */
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+    margin-top: 0;
+  }
+
+  .image-container {
+    max-width: 100%;
+  }
+
+  .displayed-image {
+    max-height: 200px;
+  }
 }
