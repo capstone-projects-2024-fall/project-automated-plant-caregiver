@@ -9,14 +9,12 @@ const Navbar = () => {
             <Link to="/Home"> {/* Make the image a clickable link */}
                 <img src={logo} alt="Logo" className="logo" />
             </Link>
-            <ul>
-                <li>
-                    <Link to="/about">About</Link>
-                </li>
-                <li>
-                    <Link to="/chat">AI Chat</Link>
-                </li>
-            </ul>
+            <div className="nav-links">
+                <Link to="/landing">Home</Link>
+                <Link to="/Home">Plant</Link>
+                <Link to="/about">About</Link>
+                <Link to="/chat">AI Chat</Link>
+            </div>
         </nav>
     );
 };
