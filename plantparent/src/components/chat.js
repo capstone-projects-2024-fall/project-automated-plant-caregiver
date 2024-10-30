@@ -25,7 +25,7 @@ const Chat = () => {
     setTimeout(() => {
       const aiResponse = `You said: "${userMessage}"`; // Placeholder AI response
       setMessages((prevMessages) => [...prevMessages, { text: aiResponse, sender: 'ai' }]);
-    }, 1000);  // delay
+    }, 1000);  // Simulate a 1-second delay for the AI response
   };
 
   return (
