@@ -25,22 +25,24 @@ const Chat = () => {
     setTimeout(() => {
       const aiResponse = `You said: "${userMessage}"`; // Placeholder AI response
       setMessages((prevMessages) => [...prevMessages, { text: aiResponse, sender: 'ai' }]);
-    }, 1000);  // Simulate a 1-second delay for the AI response
+    }, 1000);  // delay
   };
 
   return (
     <div className="chat-container">
       <div className="chat-box">
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}
-          >
-            {message.text}
+          <div key={index} className={`message-wrapper ${message.sender === 'user' ? 'align-right' : 'align-left'}`}>
+            <div style={{ fontSize: '12px', color: '#000', marginBottom: '2px' }}>
+              {message.sender === 'user' ? 'User' : 'Plant Parent'}
+            </div>
+            <div className={`message ${message.sender === 'user' ? 'user-message' : 'ai-message'}`}>
+              {message.text}
+            </div>
           </div>
         ))}
       </div>
-      
+
       <div className="input-container">
         <input
           type="text"
