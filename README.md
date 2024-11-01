@@ -1,7 +1,7 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=15801588)
 <div align="center">
 
-# Automated Plant Caregiver
+# PlantParent
 [![Report Issue on Jira](https://img.shields.io/badge/Report%20Issues-Jira-0052CC?style=flat&logo=jira-software)](https://temple-cis-projects-in-cs.atlassian.net/jira/software/c/projects/DT/issues)
 [![Deploy Docs](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml/badge.svg)](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml)
 [![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://capstone-projects-2024-fall.github.io/project-automated-plant-caregiver/)
@@ -11,7 +11,7 @@
 
 ## Keywords
 
-Section 02, Python, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration, Machine Learning
+Section 02, React, Node.js, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration (AWS), Machine Learning, AI
 
 ## Project Abstract
 
@@ -32,12 +32,17 @@ This project will compare existing open-source projects, like the OpenAg initiat
 
 ## Required Resources
 ### Hardware Resources: 
-- Microcontroller (Raspberry Pi)
-- Sensors (moisture, light, temperature)
-- Actuators (water pump, lights)
-- Wi-Fi module.
+- ESP32 DevKit V1
+- Adafruit STEMMA Soil Sensor - I2C Capacitive Moisture Sensor
+- BH1750FVJ Light Sensor
+- AM2320 Digital Temperature and Humidity Sensor
+- Submersible 3V DC Water Pump 
+- WS2812B LED Pixel Strip
 ### Software Resources: 
-- Python
-- IoT libraries
-- Mobile app development framework
-- Cloud services (AWS/Google Cloud).
+- AWS Amplify
+- AWS EC2
+- AWS S3/DynamoDB
+- Node.js
+- React
+- PlatformIO
+- CSS
