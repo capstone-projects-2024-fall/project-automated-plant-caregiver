@@ -11,7 +11,7 @@
 
 ## Keywords
 
-Section 02, React, Node.js, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration (AWS), Machine Learning, AI
+Section 02, React, Figma, Node.js, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration (AWS), Machine Learning, AI
 
 ## Project Abstract
 
@@ -46,3 +46,19 @@ This project will compare existing open-source projects, like the OpenAg initiat
 - React
 - PlatformIO
 - CSS
+
+## Steps to Run Locally
+- Clone Repository
+- Open two separate terminals
+- Terminal 1:
+  - cd plantparent (Go to plantparent folder)
+  - npm install (Install dependencies)
+  - npm start (Begin frontend)
+  - Ctrl + click routes stated in terminal
+- Terminal 2:
+  - cd plantparent (Go to plantparent folder)
+  - cd backend (Go to backend folder)
+  - npm install (Install dependencies)
+  - node server.js (Begin backend server)
+  - Navigate to this link http://localhost:3001
+  - If not working change the port number 
