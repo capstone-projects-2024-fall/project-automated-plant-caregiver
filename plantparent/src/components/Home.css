@@ -1,89 +1,128 @@
-/* Container for the entire page */
 .page {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns: left half and right half */
-  grid-template-rows: 1fr 1fr;    /* Two rows: top half and bottom half */
-  height: 100vh;                  /* Full viewport height */
-  margin-top: 20px;
-}
-
-/* Left half: image on top, sensor data below */
-.left-half {
-  display: grid;
-  grid-template-rows: 1fr auto; /* Top half for image, bottom for sensor data */
-  grid-row: 1 / 3;              /* Spans the full height of the left half */
-  background-color: #ffffff;
-  padding: 20px;
-}
-
-/* Image container (top-left quarter) */
-.image-container {
-  width: 100%;        /* Full width of the container */
-  max-width: 600px;   /* Set a max width */
-  height: auto;      /* Fixed height for all images */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  overflow: hidden;   /* Ensures large images don't overflow the container */
-  background-color: #ffffff; /* Optional: background color for the image box */
-}
-
-.displayed-image {
-  max-width: 100%;    /* Images will scale down to fit the container */
-  max-height: 300px;   /* Ensures image does not exceed container height */
-  object-fit: contain;  /* Ensures the entire image fits inside the container without distortion */
-}
-
-/* Info container (bottom-left quarter) */
-.info-container {
-  background-color: #fff;
+  gap: 20px;
+  margin-top: 80px;
   padding: 20px;
-  text-align: center;
-  border-top: 1px solid #ddd;
-  flex-shrink: 0;  /* Ensures the text box doesn't move */
+  box-sizing: border-box;
 }
 
-/* Right half for dropdown */
-.right-half {
-  grid-column: 2;  /* Right column */
-  grid-row: 1 / 3; /* Spans the full height of the right half */
-  padding: 20px;
-  background-color: #fff;
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.plant-row {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: row;
+  gap: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  box-sizing: border-box;
 }
 
-/* Styling for the dropdown menu */
-.plant-dropdown {
-  padding: 8px;  /* Make the dropdown smaller */
-  font-size: 1.1em;  /* Slightly smaller text */
-  border-radius: 15px;  /* Make the dropdown more rounded */
-  border: 1px solid #ccc;
-  outline: none;
+.plant-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.plant-image {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.sensor-data {
+  text-align: center;
+}
+
+.plant-calendar {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.week-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.calendar-day-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  background-color: #f9f9f9;
+  border-radius: 2px;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  font-size: 0.7em;
 }
 
-.plant-dropdown:focus {
-  border-color: #1abc9c;  /* Border color changes on focus */
+.calendar-day-row:hover {
+  background-color: #e0f7fa;
 }
 
+.raindrop-icon {
+  font-size: 1.2em;
+  margin-left: 10px;
+}
 
-/* Responsive Adjustments for Mobile Devices */
+.add-plant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  height: 100px;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  font-size: 2em;
+  color: #888;
+  text-align: center;
+}
+
+/* Responsive styling for Mobile Devices  */
 @media (max-width: 768px) {
-  .page {
-    flex-direction: column;
-    padding: 10px;
-    gap: 15px;
-    margin-top: 0;
+  .plant-grid {
+    grid-template-columns: 1fr; /* Stack items in a single column on small screens */
   }
 
-  .image-container {
+  .plant-row {
+    flex-direction: column; /* Stack plant info and calendar vertically */
+    align-items: center;
+  }
+
+  .plant-info, .plant-calendar {
+    width: 100%; /* Full width for both sections on small screens */
+  }
+
+  .plant-image {
+    width: 60px; /* Slightly smaller image size for mobile */
+  }
+
+  .calendar-day-row {
+    font-size: 0.8em; /* Smaller font size for mobile */
+    padding: 6px 8px;
+  }
+
+  .add-plant {
     max-width: 100%;
-  }
-
-  .displayed-image {
-    max-height: 200px;
+    height: 80px;
+    font-size: 1.5em;
   }
 }
