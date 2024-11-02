@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
-import Plant from './Plant'; // Importing the correct file name for the plant component
+import Plant from './Plant';
 import './Home.css';
 
 const Home = () => {
-  const [plants, setPlants] = useState([1, 2]); // Initial state with two plants
+    const [plants, setPlants] = useState([1, 2]);
 
-  const addPlant = () => {
-    setPlants((prevPlants) => [...prevPlants, prevPlants.length + 1]);
-  };
+    // Function to add a new plant container
+    const addPlant = () => {
+        setPlants((prevPlants) => [...prevPlants, prevPlants.length + 1]);
+    };
 
-  return (
-    <div className="page">
-      <div className="plant-grid">
-        {plants.map((id) => (
-          <Plant key={id} plantId={id} />
-        ))}
-        <div className="add-plant" onClick={addPlant}>
-          <p>+</p>
+    // Function to delete a plant container by its ID
+    const deletePlant = (id) => {
+        setPlants((prevPlants) => prevPlants.filter((plantId) => plantId !== id));
+    };
+
+    return (
+        <div className="page">
+            <div className="plant-grid">
+                {plants.map((id) => (
+                    <div key={id} className="plant-row">
+                        <button className="delete-plant" onClick={() => deletePlant(id)}>×</button>
+                        <Plant plantId={id} />
+                    </div>
+                ))}
+                <button className="add-plant" onClick={addPlant}>+</button>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Home;
