@@ -5,7 +5,9 @@ import './chat.css';
 const Chat = () => {
   const [messages, setMessages] = useState([
     { text: 'Hello, Oracle of Planti!', sender: 'user' },
-    { text: 'Hi! What information about plants would you like to know?', sender: 'ai' }
+
+    { text: 'Hi! What information about plants would you like to know?', sender: 'ai' },
+
   ]);
   const [input, setInput] = useState('');
 
