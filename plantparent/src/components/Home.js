@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import fetchSensorData from './sensorData';  // Import the fetch function
 import './Home.css';
-import plantImg from './plantTest.png'
-import logo from './logo.png'
+import plantImg from './plantTest.png';
+import logo from './logo.png';
 
 const Home = () => {
   const [sensorData, setSensorData] = useState({ lux: null, soil_moisture: null, temp: null });
@@ -14,21 +14,19 @@ const Home = () => {
     { src: logo, alt: 'Plant 2' },
   ];
 
-  const [currentImage, setCurrentImage] = useState(images[0]);  // Initial image
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Function to handle dropdown change
-  const handleDropdownChange = (event) => {
-    const selectedIndex = event.target.value;
-    setCurrentImage(images[selectedIndex]);  // Change the image based on selected option
+  // Function to toggle images on click
+  const handleImageClick = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   // Fetch sensor data when the component mounts
   useEffect(() => {
     fetchSensorData(setSensorData, setError);  // Call the fetch function and pass the state handlers
 
-    // Set up interval to fetch data periodically 
+    // Set up interval to fetch data periodically
     const interval = setInterval(() => fetchSensorData(setSensorData, setError), 50000000);
-
 
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
@@ -39,34 +37,39 @@ const Home = () => {
       {/* Left Side: Image */}
       <div className="left-half">
         <div className="image-container">
-          <img src={currentImage.src} alt={currentImage.alt} className="displayed-image" />
+          <img
+            src={images[currentImageIndex].src}
+            alt={images[currentImageIndex].alt}
+            className="displayed-image interactive"
+            onClick={handleImageClick}
+          />
         </div>
 
-        {/* Sensor data displayed in the bottom-left quarter */}
-        <div className="info-container">
-          <h2>Current Plant Sensor Data</h2>
+        {/* Sensor data displayed in individual boxes */}
+        <div className="sensor-data-container">
           {error ? (
             <p>{error}</p>
           ) : (
             <>
-              <p><strong>Light Level:</strong> {sensorData.lux !== null ? `${sensorData.lux} lux` : 'Loading...'}</p>
-              <p><strong>Soil Moisture:</strong> {sensorData.soil_moisture !== null ? sensorData.soil_moisture : 'Loading...'}</p>
-              <p><strong>Temperature:</strong> {sensorData.temp !== null ? `${sensorData.temp} °C` : 'Loading...'}</p>
+              <div className="sensor-box light-level">
+                <p><strong>Light Level:</strong></p>
+                <span>{sensorData.lux !== null ? `${sensorData.lux} lux` : 'Loading...'}</span>
+              </div>
+              <div className="sensor-box soil-moisture">
+                <p><strong>Soil Moisture:</strong></p>
+                <span>{sensorData.soil_moisture !== null ? sensorData.soil_moisture : 'Loading...'}</span>
+              </div>
+              <div className="sensor-box temperature">
+                <p><strong>Temperature:</strong></p>
+                <span>{sensorData.temp !== null ? `${sensorData.temp} °C` : 'Loading...'}</span>
+              </div>
             </>
           )}
         </div>
       </div>
-
-      {/* Right Half: Dropdown menu commented out for now
-      <div className="right-half">
-        <select onChange={handleDropdownChange} className="plant-dropdown">
-          <option value="0">Plant 1</option>
-          <option value="1">Plant 2</option>
-        </select>
-      </div>
-      */}
     </div>
   );
 };
 
 export default Home;
+
