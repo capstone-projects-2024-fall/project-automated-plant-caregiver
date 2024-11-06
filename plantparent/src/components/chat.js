@@ -7,15 +7,19 @@ import { callLambda as actualCallLambda } from './Chatbot_Lambda_Function';
 const dummyCallLambda = async (message, image = null) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
-        message: `Dummy response for message: "${message}"${image ? ' with an image' : ''}`
-      });
-    }, 1000); // Simulate a 1-second delay
+      let dummyResponse = {
+        message: `Response: ${message || 'No message provided'}  ${image ? "|| Image: " + image.name : ''}`,
+        imageUrl: image instanceof File ? URL.createObjectURL(image) : null
+      };
+
+      resolve(dummyResponse);
+    }, 1000);
   });
 };
 
 // Use the dummy function for testing
-const callLambda = process.env.NODE_ENV === 'test' ? dummyCallLambda : actualCallLambda;
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`); // Add this line to verify NODE_ENV
+const callLambda = process.env.NODE_ENV === 'development' ? dummyCallLambda : actualCallLambda;
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -49,12 +53,14 @@ const Chat = () => {
       setMessages(prev => [...prev, userMessage]);
       setInput('');
 
+      console.log('Calling callLambda');
       const response = await callLambda(
         input,
         selectedFile,
         localStorage.getItem('userId') // Add user tracking if needed
       );
 
+      console.log('Received response:', response);
       setMessages(prev => [...prev, {
         text: response.message,
         sender: 'ai'
