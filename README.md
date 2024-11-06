@@ -11,20 +11,20 @@
 
 ## Keywords
 
-Section 02, React, Node.js, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration (AWS), Machine Learning, AI
+Section 02, React, Figma, Node.js, Javascript, IoT, Smart Home, Automation, Home Gardening, Sensors, Embedded Systems, Cloud Integration, AWS, Amplify, Machine Learning, AI 
 
 ## Project Abstract
 
-This document proposes an application for automating the care of home plants using the Internet of Things. The system will monitor soil moisture, light levels, and temperature using sensors connected to a microcontroller. Data will be processed and analyzed to optimize plant care, with automatic watering, lighting adjustments, and climate control. The user can control and monitor the system remotely via a mobile app or web interface, with real-time alerts and recommendations provided through push notifications.
+This document proposes an application for automating the care of home plants using the Internet of Things. The system will monitor soil moisture, light levels, and temperature using sensors connected to a microcontroller. Data will be processed and analyzed to optimize plant care, with automatic watering, lighting adjustments, and climate control. The user can control and monitor the system remotely via a web interface, with real-time alerts and recommendations provided through push notifications.
 
 
 ## High-Level Requirement
 
-The product will automate plant care by monitoring environmental conditions and adjusting watering, lighting, and temperature control as needed. Users will interact with the system through a mobile app, receiving real-time updates and recommendations based on data analysis. The system will also have a manual override feature to allow users to control the environment directly.
+The product will automate plant care by monitoring environmental conditions and adjusting watering, lighting, and temperature control as needed. Users will interact with the system through a web browser, receiving real-time updates and recommendations based on data analysis. The system will also have a manual override feature to allow users to control the environment directly.
 
 ## Conceptual Design
 
-The system will consist of an embedded microcontroller connected to various sensors. The microcontroller will process the sensor data and control actuators (such as water pumps and lights). The programming language used will be Python. The mobile app will be developed using a framework like Flutter or React Native, and the backend will be hosted on a cloud platform such as AWS or Google Cloud.
+The system will consist of a microcontroller connected to various sensors. The microcontroller will process the sensor data. The programming language used will be Javascript. The web browser will be developed using a framework like React, and the backend will be hosted on a cloud platform such as AWS Amplify. LLM AI will also be integrated into the application to aid users in monitoring their plant as the AI will have context about the plants that are being taken care of by the user.
 
 ## Background
 
@@ -46,3 +46,24 @@ This project will compare existing open-source projects, like the OpenAg initiat
 - React
 - PlatformIO
 - CSS
+
+## How to run locally
+- Download the ZIP
+
+  ![image](https://github.com/user-attachments/assets/d9d6f791-1456-403b-bcfa-dffb266402e8)
+
+- Extract ZIP files
+- Navigate to plantparent folder (cd plantparent)
+
+  ![image](https://github.com/user-attachments/assets/33d64c27-5304-4ee3-b55a-e05ebe68e6b7)
+
+- Run these commands
+    - npm install
+    - npm start
+- The development server starts automatically
+- If not a link should also have been provided:
+
+  ![image](https://github.com/user-attachments/assets/2ffb84e7-91e7-4f8f-8de5-cb50ba40f146)
+
+
+
