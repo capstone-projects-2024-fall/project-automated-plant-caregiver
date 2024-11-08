@@ -118,7 +118,7 @@ const Chat = () => {
           <MessageWrapper key={index} sender={message.sender}>
             {message.sender === 'ai' ? (
               <SenderInfo sender="ai">
-                <ProfilePic src="plant-avatar.png" alt="Plant Parent" />
+                <ProfilePic src="https://imagizer.imageshack.com/img922/4007/AosLgM.jpg" alt="Plant Parent" />
                 Plant Parent
                 <OnlineStatus />
               </SenderInfo>
