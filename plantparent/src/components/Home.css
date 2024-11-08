@@ -1,89 +1,205 @@
-/* Container for the entire page */
 .page {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns: left half and right half */
-  grid-template-rows: 1fr 1fr;    /* Two rows: top half and bottom half */
-  height: 100vh;                  /* Full viewport height */
-  margin-top: 20px;
-}
-
-/* Left half: image on top, sensor data below */
-.left-half {
-  display: grid;
-  grid-template-rows: 1fr auto; /* Top half for image, bottom for sensor data */
-  grid-row: 1 / 3;              /* Spans the full height of the left half */
-  background-color: #ffffff;
-  padding: 20px;
-}
-
-/* Image container (top-left quarter) */
-.image-container {
-  width: 100%;        /* Full width of the container */
-  max-width: 600px;   /* Set a max width */
-  height: auto;      /* Fixed height for all images */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  overflow: hidden;   /* Ensures large images don't overflow the container */
-  background-color: #ffffff; /* Optional: background color for the image box */
-}
-
-.displayed-image {
-  max-width: 100%;    /* Images will scale down to fit the container */
-  max-height: 300px;   /* Ensures image does not exceed container height */
-  object-fit: contain;  /* Ensures the entire image fits inside the container without distortion */
-}
-
-/* Info container (bottom-left quarter) */
-.info-container {
-  background-color: #fff;
+  gap: 20px;
+  margin-top: 80px;
   padding: 20px;
-  text-align: center;
-  border-top: 1px solid #ddd;
-  flex-shrink: 0;  /* Ensures the text box doesn't move */
+  box-sizing: border-box;
 }
 
-/* Right half for dropdown */
-.right-half {
-  grid-column: 2;  /* Right column */
-  grid-row: 1 / 3; /* Spans the full height of the right half */
-  padding: 20px;
-  background-color: #fff;
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.plant-row {
+  position: relative; /* Allows absolute positioning of the "X" button within this container */
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: row;
+  gap: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  box-sizing: border-box;
 }
 
-/* Styling for the dropdown menu */
-.plant-dropdown {
-  padding: 8px;  /* Make the dropdown smaller */
-  font-size: 1.1em;  /* Slightly smaller text */
-  border-radius: 15px;  /* Make the dropdown more rounded */
-  border: 1px solid #ccc;
-  outline: none;
+.delete-plant {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  z-index: 1;
 }
 
-.plant-dropdown:focus {
-  border-color: #1abc9c;  /* Border color changes on focus */
+.delete-plant:hover {
+  background-color: #ff1a1a;
 }
 
+.plant-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
 
-/* Responsive Adjustments for Mobile Devices */
+.plant-image {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.sensor-data {
+  text-align: center;
+}
+
+.plant-calendar {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.week-navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 80%; /* Adjust as needed for compact look */
+  margin-bottom: 5px;
+}
+
+.week-navigation button {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: color 0.3s;
+}
+
+.week-navigation button:hover {
+  color: #1abc9c;
+}
+
+.week-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px; /* Smaller gap between days */
+  width: 90%;
+}
+
+.calendar-day-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px; /* Reduced padding for smaller row height */
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75em; /* Smaller font for compact layout */
+  height: 25px; /* Set height to control row size */
+}
+
+.day-label {
+  flex: 1;
+  text-align: left;
+}
+
+.emoji-toggles {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.emoji-toggle {
+  font-size: 1.2em;
+  padding: 2px;
+  border-radius: 5px;
+  width: 1.2em;
+  height: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.emoji-toggle.visible {
+  background-color: #e0f7fa;
+}
+
+/* Hover effect for changing background color to green */
+.emoji-toggle:hover {
+  background-color: #a8e6a1; /* Light green background on hover */
+}
+
+.calendar-day-row:hover {
+  background-color: #e0f7fa;
+}
+
+.add-plant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  height: 100px;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  font-size: 2em;
+  color: #888;
+  text-align: center;
+}
+
+/* Responsive styling for Mobile Devices */
 @media (max-width: 768px) {
-  .page {
+  .plant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plant-row {
     flex-direction: column;
-    padding: 10px;
-    gap: 15px;
-    margin-top: 0;
+    align-items: center;
   }
 
-  .image-container {
+  .plant-info, .plant-calendar {
+    width: 100%;
+  }
+
+  .plant-image {
+    width: 60px;
+  }
+
+  .calendar-day-row {
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  .emoji-toggle {
+    font-size: 1.7em;
+  }
+
+  .add-plant {
     max-width: 100%;
-  }
-
-  .displayed-image {
-    max-height: 200px;
+    height: 80px;
+    font-size: 1.5em;
   }
 }
