@@ -19,7 +19,7 @@ const dummyCallLambda = async (message, image = null) => {
 
 // Use the dummy function for testing
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`); // Add this line to verify NODE_ENV
-const callLambda = process.env.NODE_ENV === 'development' ? dummyCallLambda : actualCallLambda;
+const callLambda = process.env.NODE_ENV === 'developments' ? dummyCallLambda : actualCallLambda;
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);

@@ -6,11 +6,15 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { PutCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Initialize DynamoDB
-const ddbClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
 // Initialize OpenAI with latest model
@@ -18,10 +22,9 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-// Helper to store chat history in DynamoDB
 async function storeChatHistory(userId, message, response) {
     const params = {
-        TableName: process.env.DYNAMODB_TABLE,
+        TableName: 'ChatMessages',
         Item: {
             userId,
             timestamp: new Date().toISOString(),
@@ -30,24 +33,33 @@ async function storeChatHistory(userId, message, response) {
         }
     };
 
-    await ddbDocClient.send(new PutCommand(params));
+    try {
+        await ddbDocClient.send(new PutCommand(params));
+    } catch (error) {
+        console.error('Failed to store chat history:', error);
+        // Continue execution even if storage fails
+    }
 }
 
-app.post('/chat', async (req, res) => {
+app.post('/Chat', async (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
     try {
         const { message, imageUrl, imageBase64, userId } = req.body;
+        console.log('Received request:', {
+            hasMessage: !!message,
+            hasImage: !!(imageUrl || imageBase64),
+            hasUserId: !!userId
+        });
 
         if (!message && !imageUrl && !imageBase64) {
             return res.status(400).json({ error: 'Either message or image is required' });
         }
 
-        // Prepare messages for ChatGPT
         const messages = [
             { role: "system", content: "You are the Oracle of Planti, a knowledgeable assistant specializing in plant care and gardening advice." },
             { role: "user", content: message }
         ];
 
-        // If image is provided, add it to the messages
         if (imageUrl || imageBase64) {
             messages[1].content = [
                 {
@@ -61,16 +73,14 @@ app.post('/chat', async (req, res) => {
             ];
         }
 
-        // Call OpenAI with GPT-4 Vision if image is present, otherwise use GPT-4
         const response = await openai.chat.completions.create({
-            model: imageUrl || imageBase64 ? "gpt-4-vision-preview" : "gpt-4-turbo-preview",
+            model: "gpt-4-turbo-preview", // Updated model name
             messages,
             max_tokens: 500
         });
 
         const aiResponse = response.choices[0].message.content;
 
-        // Store chat history if userId is provided
         if (userId) {
             await storeChatHistory(userId, message, aiResponse);
         }
@@ -78,7 +88,11 @@ app.post('/chat', async (req, res) => {
         return res.status(200).json({ message: aiResponse });
     } catch (error) {
         console.error('Error processing chat request:', error);
-        return res.status(500).json({ error: 'Failed to process chat request', details: error.message });
+        return res.status(500).json({
+            error: 'Failed to process chat request',
+            details: error.message,
+            timestamp: new Date().toISOString()
+        });
     }
 });
 

@@ -1,4 +1,6 @@
 export const callLambda = async (message, image = null, userId = null) => {
+  const API_URL = 'https://ol5xz6ueag.execute-api.us-east-1.amazonaws.com';
+
   try {
     const body = {
       message,
@@ -14,7 +16,9 @@ export const callLambda = async (message, image = null, userId = null) => {
       }
     }
 
-    const response = await fetch(`${process.env.REACT_APP_API_GATEWAY_URL}/chat`, {
+    console.log('Making request to:', `${API_URL}/Chat`);
+
+    const response = await fetch(`${API_URL}/Chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,18 +26,19 @@ export const callLambda = async (message, image = null, userId = null) => {
       body: JSON.stringify(body)
     });
 
+    console.log('Response status:', response.status);
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error calling Lambda:', error);
+    console.error('Error details:', error);
     throw error;
   }
 };
 
-// Helper function to convert File to base64
 const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
