@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {Link} from 'react-router-dom';
 import fetchSensorData from './sensorData';
 import './Home.css';
 import plantImg from './plantTest.png';
@@ -66,7 +67,9 @@ const Plant = ({ plantId }) => {
     return (
         <div className="plant-row">
             <div className="plant-info">
+                <Link to = "/detailedView">
                 <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
+                </Link>
                 <div className="sensor-data">
                     <h3>Plant {plantId} Sensor Data</h3>
                     {error ? (
