@@ -1,48 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import fetchSensorData from './sensorData';  // Import the fetch function
+import fetchSensorData from './sensorData';
 import './Home.css';
-import plantImg from './plantTest.png'
-import logo from './logo.png'
+import plantImg from './plantTest.png';
+import logo from './logo.png';
 
 const Home = () => {
   const [sensorData, setSensorData] = useState({ lux: null, soil_moisture: null, temp: null });
   const [error, setError] = useState(null);
+  const [userImage, setUserImage] = useState(null);
 
-  // Images to cycle through
   const images = [
     { src: plantImg, alt: 'Plant 1' },
     { src: logo, alt: 'Plant 2' },
+    ...(userImage ? [{ src: userImage, alt: 'User Uploaded Image' }] : []),
   ];
 
-  const [currentImage, setCurrentImage] = useState(images[0]);  // Initial image
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Function to handle dropdown change
-  const handleDropdownChange = (event) => {
-    const selectedIndex = event.target.value;
-    setCurrentImage(images[selectedIndex]);  // Change the image based on selected option
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
-  // Fetch sensor data when the component mounts
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setUserImage(imageUrl);
+      setCurrentImageIndex(images.length); // Display uploaded image immediately
+    }
+  };
+
   useEffect(() => {
-    fetchSensorData(setSensorData, setError);  // Call the fetch function and pass the state handlers
+    fetchSensorData(setSensorData, setError);
 
-    // Set up interval to fetch data periodically 
-    const interval = setInterval(() => fetchSensorData(setSensorData, setError), 50000000);
+    const interval = setInterval(() => fetchSensorData(setSensorData, setError), 5000); // 5 seconds
 
-
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      if (userImage) URL.revokeObjectURL(userImage);
+    };
+  }, [userImage]);
 
   return (
-    <div className='page'>
-      {/* Left Side: Image */}
+    <div className="page">
+      {/* Left Side: Main Displayed Image */}
       <div className="left-half">
         <div className="image-container">
-          <img src={currentImage.src} alt={currentImage.alt} className="displayed-image" />
+          <img src={images[currentImageIndex]?.src} alt={images[currentImageIndex]?.alt} className="displayed-image" />
         </div>
-
-        {/* Sensor data displayed in the bottom-left quarter */}
         <div className="info-container">
           <h2>Current Plant Sensor Data</h2>
           {error ? (
@@ -57,16 +62,14 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Right Half: Dropdown menu commented out for now
+      {/* Right Side: Next Button and File Upload */}
       <div className="right-half">
-        <select onChange={handleDropdownChange} className="plant-dropdown">
-          <option value="0">Plant 1</option>
-          <option value="1">Plant 2</option>
-        </select>
+        <button onClick={handleNextImage} className="next-button">Next</button>
+        <input type="file" onChange={handleFileUpload} accept="image/*" className="upload-button" />
       </div>
-      */}
     </div>
   );
 };
 
 export default Home;
+
