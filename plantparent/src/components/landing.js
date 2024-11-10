@@ -1,52 +1,25 @@
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import React, { useEffect, useState } from 'react';
-import './landing.css'
-const handleLoginSuccess = (response) => {
-    console.log("Login Success:", response);
-  };
+import React from 'react';
+import { Amplify } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react'; // Import the Authenticator
+import awsconfig from '../aws-exports';
+import '@aws-amplify/ui-react/styles.css'; // Amplify UI styles
 
-  const handleLoginFailure = (error) => {
-    console.error("Login Failed:", error);
-  };
+// Configure Amplify
+Amplify.configure(awsconfig);
 
-
-function Landing() {
+function App() {
     return (
-    
-      <div className='page'>
-
-        <h1>Welcome to My PlantParent</h1>
-        <p>Automated Help with Your Plants</p>
-
-        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-        <section>
-          <h2>Login or Sign Up</h2>
-
-          {/* Login Button */}
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginFailure}
-            render={(renderProps) => (
-              <button 
-                className="google-button" 
-                onClick={renderProps.onClick} 
-                disabled={renderProps.disabled}
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt="Google icon"
-                  className="google-icon"
-                />
-                Login with Google
-              </button>
+        <Authenticator>
+            {({ signOut, user }) => (
+                <div>
+                    <h1>Welcome to My PlantParent</h1>
+                    <p>Automated Help with Your Plants</p>
+                    <p>Welcome, {user?.username}</p>
+                    <button onClick={signOut}>Sign Out</button>
+                </div>
             )}
-          />
-        
-        </section>
-
-        <button>Sign Up</button>
-        </GoogleOAuthProvider>
-      </div>
+        </Authenticator>
     );
-  }
-  export default Landing;
+}
+
+export default App;
