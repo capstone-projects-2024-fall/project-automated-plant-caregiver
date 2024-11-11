@@ -14,7 +14,6 @@ const Navbar = () => {
                 <Link to="/Home">Plant</Link>
                 <Link to="/about">About</Link>
                 <Link to="/chat">AI Chat</Link>
-                <Link to="/AuthPage">Login</Link>
             </div>
         </nav>
     );

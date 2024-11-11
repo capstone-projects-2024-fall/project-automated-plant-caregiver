@@ -6,7 +6,6 @@ import Navbar from './components/navbar';
 import Chat from './components/chat';
 import About from './components/about';
 import Landing from './components/landing';
-import Login from './components/AuthPage';
 
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
             <Route path='/landing' element={<Landing />} />
             <Route path='/chat' element={<Chat />} />
             <Route path='/about' element={<About />} />
-            <Route path='/AuthPage' element={<Login />}/>
           </Routes>
       </div>
     </Router>

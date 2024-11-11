@@ -3,7 +3,6 @@ import plantImage1 from './plantImage1.png';
 import plantImage2 from './plantImage2.png';
 import productDesignImage from './sampleDesign.png';
 
-
 function About() {
    return (
       <div className="about-container">
