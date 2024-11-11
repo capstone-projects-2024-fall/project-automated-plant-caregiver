@@ -1,13 +1,13 @@
 import React from 'react';
 import { Amplify } from 'aws-amplify';
-import { Authenticator } from '@aws-amplify/ui-react'; // Import the Authenticator
+import { Authenticator } from '@aws-amplify/ui-react'; 
 import awsconfig from '../aws-exports';
-import '@aws-amplify/ui-react/styles.css'; // Amplify UI styles
+import '@aws-amplify/ui-react/styles.css'; 
 
 // Configure Amplify
 Amplify.configure(awsconfig);
 
-function App() {
+function Landing() {
     return (
         <Authenticator>
             {({ signOut, user }) => (
@@ -22,4 +22,4 @@ function App() {
     );
 }
 
-export default App;
+export default Landing;
