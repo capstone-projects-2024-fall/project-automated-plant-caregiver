@@ -16,11 +16,12 @@
       "function": {
         "sensorDataHandler": {
           "deploymentBucketName": "amplify-plantparent-dev-b979d-deployment",
-          "s3Key": "amplify-builds/sensorDataHandler-78736b67674267337647-build.zip"
+          "s3Key": "amplify-builds/sensorDataHandler-4f49535a5a6a624b3671-build.zip"
         }
       },
       "auth": {
-        "plantparent": {}
+        "plantparent": {},
+        "userPoolGroups": {}
       },
       "storage": {
         "dataStorage": {}
