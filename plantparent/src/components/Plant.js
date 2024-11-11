@@ -10,6 +10,8 @@ const Plant = ({ plantId }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDays, setSelectedDays] = useState({});
     const [applyMode, setApplyMode] = useState("water"); // Mode for the plus button
+    const [plantName, setPlantName] = useState(`Plant ${plantId}`); // State for plant name
+    const [isEditingName, setIsEditingName] = useState(false); // Track if the name is being edited
 
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
@@ -50,9 +52,9 @@ const Plant = ({ plantId }) => {
         const updatedDays = {};
         weekDays.forEach((day) => {
             const dayKey = format(day, 'yyyy-MM-dd');
-            updatedDays[dayKey] = { 
-                ...selectedDays[dayKey], 
-                [applyMode]: true 
+            updatedDays[dayKey] = {
+                ...selectedDays[dayKey],
+                [applyMode]: true
             };
         });
         setSelectedDays((prevSelected) => ({ ...prevSelected, ...updatedDays }));
@@ -63,12 +65,30 @@ const Plant = ({ plantId }) => {
         setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
     };
 
+    // Save the plant name
+    const handleNameChange = (e) => setPlantName(e.target.value);
+    const saveName = () => setIsEditingName(false);
+
     return (
         <div className="plant-row">
             <div className="plant-info">
                 <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
                 <div className="sensor-data">
                     <h3>Plant {plantId} Sensor Data</h3>
+                    {isEditingName ? (
+                        <div>
+                            <input
+                                type="text"
+                                value={plantName}
+                                onChange={handleNameChange}
+                                onBlur={saveName}
+                                autoFocus
+                                className="name-input"
+                            />
+                        </div>
+                    ) : (
+                        <h3 onClick={() => setIsEditingName(true)}>{plantName}</h3>
+                    )}
                     {error ? (
                         <p>{error}</p>
                     ) : (
