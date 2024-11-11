@@ -27,6 +27,7 @@ const AuthPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
+
       console.log('Logging in with:', formData.username, formData.password);
     } else {
       if (formData.password === formData.confirmPassword) {
