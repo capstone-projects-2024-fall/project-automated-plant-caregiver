@@ -27,7 +27,7 @@ const AuthPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      console.log('Logging in with:', formData.username, formData.password);
+      console.log('Logging in with:', formData.email, formData.password);
     } else {
       if (formData.password === formData.confirmPassword) {
         console.log('Signing up with:', formData.username, formData.email, formData.password);
@@ -51,16 +51,16 @@ const AuthPage = () => {
               onChange={handleChange}
               required
             />
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
           </>
         )}
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
         <label>Password:</label>
         <input
           type="password"
