@@ -56,4 +56,5 @@
   }
   
   .toggle-button:hover {
-    te
+    text-decoration: underline;
+}
