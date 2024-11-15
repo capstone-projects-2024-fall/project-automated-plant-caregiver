@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import fetchSensorData from './sensorData';
+import ChatBot from './ChatBot'; // Import the ChatBot component
 import './Home.css';
 import plantImg from './plantTest.png';
 import { addDays, subDays, startOfWeek, format } from 'date-fns';
@@ -9,9 +10,14 @@ const Plant = ({ plantId }) => {
     const [error, setError] = useState(null);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDays, setSelectedDays] = useState({});
-    const [applyMode, setApplyMode] = useState("water"); // Mode for the plus button
-    const [plantName, setPlantName] = useState(`Plant ${plantId}`); // State for plant name
-    const [isEditingName, setIsEditingName] = useState(false); // Track if the name is being edited
+    const [applyMode, setApplyMode] = useState("water");
+    const [plantName, setPlantName] = useState(`Plant ${plantId}`);
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false); // State for chatbot
+    const [editingDay, setEditingDay] = useState(null);
+    const [editAmount, setEditAmount] = useState(0);
+    const [editTime, setEditTime] = useState("12:00");
 
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
@@ -23,7 +29,6 @@ const Plant = ({ plantId }) => {
     const handlePrevWeek = () => setCurrentDate(subDays(currentDate, 7));
     const handleNextWeek = () => setCurrentDate(addDays(currentDate, 7));
 
-    // Toggle water icon for an individual day
     const toggleWater = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         setSelectedDays((prevSelected) => ({
@@ -35,7 +40,6 @@ const Plant = ({ plantId }) => {
         }));
     };
 
-    // Toggle sun icon for an individual day
     const toggleSun = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         setSelectedDays((prevSelected) => ({
@@ -47,92 +51,140 @@ const Plant = ({ plantId }) => {
         }));
     };
 
-    // Apply all days in the current week to water or sun based on `applyMode`
-    const applyAllDays = () => {
-        const updatedDays = {};
-        weekDays.forEach((day) => {
-            const dayKey = format(day, 'yyyy-MM-dd');
-            updatedDays[dayKey] = {
-                ...selectedDays[dayKey],
-                [applyMode]: true
-            };
+    const openModal = (day) => {
+        const dayKey = format(day, 'yyyy-MM-dd');
+        const dayData = selectedDays[dayKey] || {};
+        setEditingDay(day);
+        setEditAmount(dayData.amount || 0);
+        setEditTime(dayData.time || "12:00");
+        setShowModal(true);
+    };
+
+    const saveDaySettings = () => {
+        const dayKey = format(editingDay, 'yyyy-MM-dd');
+        setSelectedDays((prevSelected) => ({
+            ...prevSelected,
+            [dayKey]: {
+                ...prevSelected[dayKey],
+                water: editAmount > 0,
+                amount: editAmount,
+                time: editTime,
+            },
+        }));
+        closeModal();
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setEditingDay(null);
+    };
+
+    const selectAllDays = () => {
+        setSelectedDays((prevSelected) => {
+            const updatedDays = { ...prevSelected };
+            weekDays.forEach((day) => {
+                const dayKey = format(day, 'yyyy-MM-dd');
+                if (applyMode === "water") {
+                    updatedDays[dayKey] = {
+                        ...updatedDays[dayKey],
+                        water: true,
+                        amount: 50,
+                        time: "12:00",
+                    };
+                } else if (applyMode === "sun") {
+                    updatedDays[dayKey] = {
+                        ...updatedDays[dayKey],
+                        sun: true,
+                    };
+                }
+            });
+            return updatedDays;
         });
-        setSelectedDays((prevSelected) => ({ ...prevSelected, ...updatedDays }));
     };
 
-    // Toggle between applying water or sun
-    const toggleApplyMode = () => {
-        setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
-    };
+    const deselectAllDays = () => setSelectedDays({});
 
-    // Save the plant name
-    const handleNameChange = (e) => setPlantName(e.target.value);
-    const saveName = () => setIsEditingName(false);
+    const toggleApplyMode = () => setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
+
+    const handleChatToggle = () => setIsChatOpen(!isChatOpen);
 
     return (
         <div className="plant-row">
             <div className="plant-info">
                 <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
                 <div className="sensor-data">
-                    <h3>Plant {plantId} Sensor Data</h3>
                     {isEditingName ? (
-                        <div>
-                            <input
-                                type="text"
-                                value={plantName}
-                                onChange={handleNameChange}
-                                onBlur={saveName}
-                                autoFocus
-                                className="name-input"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            value={plantName}
+                            onChange={(e) => setPlantName(e.target.value)}
+                            onBlur={() => setIsEditingName(false)}
+                            autoFocus
+                            className="plant-name-input"
+                        />
                     ) : (
                         <h3 onClick={() => setIsEditingName(true)}>{plantName}</h3>
                     )}
-                    {error ? (
-                        <p>{error}</p>
-                    ) : (
+                    {error ? <p>{error}</p> : (
                         <>
-                            <p><strong>Light Level:</strong> {sensorData.lux !== null ? `${sensorData.lux} lux` : 'Loading...'}</p>
-                            <p><strong>Soil Moisture:</strong> {sensorData.soil_moisture !== null ? sensorData.soil_moisture : 'Loading...'}</p>
-                            <p><strong>Temperature:</strong> {sensorData.temp !== null ? `${sensorData.temp} °C` : 'Loading...'}</p>
+                            <p>Light Level: {sensorData.lux ?? 'Loading...'} lux</p>
+                            <p>Soil Moisture: {sensorData.soil_moisture ?? 'Loading...'}</p>
+                            <p>Temperature: {sensorData.temp ?? 'Loading...'} °C</p>
                         </>
                     )}
                 </div>
             </div>
 
             <div className="plant-calendar">
-                <h4>Watering & Sun Schedule</h4>
                 <div className="week-navigation">
                     <button onClick={handlePrevWeek}>{"<"}</button>
-                    <button onClick={applyAllDays} className="add-all-days">➕</button>
-                    <button onClick={toggleApplyMode} className="toggle-mode">
-                        {applyMode === "water" ? "💧" : "☀️"}
-                    </button>
+                    <button onClick={selectAllDays}>➕</button>
+                    <button onClick={deselectAllDays}>➖</button>
+                    <button onClick={toggleApplyMode}>{applyMode === "water" ? "💧" : "☀️"}</button>
                     <button onClick={handleNextWeek}>{">"}</button>
                 </div>
+
                 <div className="week-calendar">
-                    {weekDays.map((day) => (
-                        <div key={day} className="calendar-day-row">
-                            <p className="day-label">{format(day, 'EEE MM/dd')}</p>
-                            <div className="emoji-toggles">
-                                <div
-                                    className={`emoji-toggle ${selectedDays[format(day, 'yyyy-MM-dd')]?.water ? 'visible' : ''}`}
-                                    onClick={() => toggleWater(day)}
-                                >
-                                    {selectedDays[format(day, 'yyyy-MM-dd')]?.water ? '💧' : ''}
-                                </div>
-                                <div
-                                    className={`emoji-toggle ${selectedDays[format(day, 'yyyy-MM-dd')]?.sun ? 'visible' : ''}`}
-                                    onClick={() => toggleSun(day)}
-                                >
-                                    {selectedDays[format(day, 'yyyy-MM-dd')]?.sun ? '☀️' : ''}
+                    {weekDays.map((day) => {
+                        const dayKey = format(day, 'yyyy-MM-dd');
+                        const dayData = selectedDays[dayKey] || {};
+
+                        return (
+                            <div key={dayKey} className="calendar-day-row" onClick={() => openModal(day)}>
+                                <p className="day-label">{format(day, 'EEE MM/dd')}</p>
+                                <div className="emoji-toggles">
+                                    {dayData.water && <span>💧 {dayData.amount}%</span>}
+                                    {dayData.sun && <span>☀️</span>}
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
+
+            {showModal && (
+                <div className="modal">
+                    <button className="close-button" onClick={closeModal}>✖</button>
+                    <h4>Edit Watering Schedule</h4>
+                    <label>
+                        Time:
+                        <input type="time" value={editTime} onChange={(e) => setEditTime(e.target.value)} />
+                    </label>
+                    <label>
+                        Water Amount:
+                        <input type="range" min="0" max="100" value={editAmount} onChange={(e) => setEditAmount(parseInt(e.target.value))} />
+                        <span>{editAmount}%</span>
+                    </label>
+                    <div className="buttons">
+                        <button onClick={saveDaySettings}>Save</button>
+                        <button onClick={closeModal}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Chatbot Icon */}
+            <div className="chatbot-icon" onClick={handleChatToggle}>🤖 Chat</div>
+            {isChatOpen && <ChatBot plantName={plantName} onClose={handleChatToggle} />}
         </div>
     );
 };
