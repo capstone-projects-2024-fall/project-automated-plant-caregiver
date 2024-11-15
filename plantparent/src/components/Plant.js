@@ -35,7 +35,7 @@ const Plant = ({ plantId }) => {
         }));
     };
 
-    // Toggle sun icon for an individual day
+
     const toggleSun = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         setSelectedDays((prevSelected) => ({
@@ -47,7 +47,7 @@ const Plant = ({ plantId }) => {
         }));
     };
 
-    // Apply all days in the current week to water or sun based on `applyMode`
+
     const applyAllDays = () => {
         const updatedDays = {};
         weekDays.forEach((day) => {
@@ -60,12 +60,12 @@ const Plant = ({ plantId }) => {
         setSelectedDays((prevSelected) => ({ ...prevSelected, ...updatedDays }));
     };
 
-    // Toggle between applying water or sun
+    // toggle
     const toggleApplyMode = () => {
         setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
     };
 
-    // Save the plant name
+    //  plant name ???
     const handleNameChange = (e) => setPlantName(e.target.value);
     const saveName = () => setIsEditingName(false);
 
@@ -98,6 +98,16 @@ const Plant = ({ plantId }) => {
                         </>
                     )}
                 </div>
+
+                {/* Light green button to go to AI Chat */}
+                <button
+                    className="ai-chat-button"
+                    onClick={() => {
+                        window.location.href = '/ai-chat'; // here is the route area
+                    }}
+                >
+                    Chat with Your Plant
+                </button>
             </div>
 
             <div className="plant-calendar">
@@ -137,3 +147,4 @@ const Plant = ({ plantId }) => {
 };
 
 export default Plant;
+
