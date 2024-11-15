@@ -17,7 +17,7 @@
 }
 
 .plant-row {
-  position: relative; /* Allows absolute positioning of the "X" button within this container */
+  position: relative; /*  positioning  */
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -81,7 +81,7 @@
 .week-navigation {
   display: flex;
   justify-content: space-between;
-  width: 80%; /* Adjust as needed for compact look */
+  width: 80%; /*  */
   margin-bottom: 5px;
 }
 
@@ -102,14 +102,14 @@
 .week-calendar {
   display: flex;
   flex-direction: column;
-  gap: 3px; /* Smaller gap between days */
+  gap: 3px;
   width: 90%;
 }
 
 .calendar-day-row {
   display: flex;
   align-items: center;
-  padding: 2px 4px; /* Reduced padding for smaller row height */
+  padding: 2px 4px; /*  padding for row ww */
   background-color: #f9f9f9;
   border-radius: 4px;
   cursor: pointer;
@@ -202,4 +202,18 @@
     height: 80px;
     font-size: 1.5em;
   }
+}
+.ai-chat-button {
+    background-color: ##98FB98; /* lighter green color ehgre */
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.ai-chat-button:hover {
+    background-color: #76c776;
 }
