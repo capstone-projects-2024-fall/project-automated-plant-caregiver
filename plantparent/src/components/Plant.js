@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import fetchSensorData from './sensorData';
-import ChatBot from './ChatBot'; // Import the ChatBot component
+import ChatBot from './ChatBot';
 import './Home.css';
 import plantImg from './plantTest.png';
 import { addDays, subDays, startOfWeek, format } from 'date-fns';
@@ -13,11 +13,11 @@ const Plant = ({ plantId }) => {
     const [applyMode, setApplyMode] = useState("water");
     const [plantName, setPlantName] = useState(`Plant ${plantId}`);
     const [isEditingName, setIsEditingName] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [isChatOpen, setIsChatOpen] = useState(false); // State for chatbot
+    const [isFlipped, setIsFlipped] = useState(false);
     const [editingDay, setEditingDay] = useState(null);
     const [editAmount, setEditAmount] = useState(0);
     const [editTime, setEditTime] = useState("12:00");
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
@@ -29,55 +29,57 @@ const Plant = ({ plantId }) => {
     const handlePrevWeek = () => setCurrentDate(subDays(currentDate, 7));
     const handleNextWeek = () => setCurrentDate(addDays(currentDate, 7));
 
+    // Toggle water for a specific day
     const toggleWater = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
-        setSelectedDays((prevSelected) => ({
-            ...prevSelected,
+        setSelectedDays((prev) => ({
+            ...prev,
             [dayKey]: {
-                ...prevSelected[dayKey],
-                water: !prevSelected[dayKey]?.water,
+                ...prev[dayKey],
+                water: !prev[dayKey]?.water,
+                amount: prev[dayKey]?.amount || 50,
+                time: prev[dayKey]?.time || "12:00",
             },
         }));
     };
 
+    // Toggle sun for a specific day
     const toggleSun = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
-        setSelectedDays((prevSelected) => ({
-            ...prevSelected,
+        setSelectedDays((prev) => ({
+            ...prev,
             [dayKey]: {
-                ...prevSelected[dayKey],
-                sun: !prevSelected[dayKey]?.sun,
+                ...prev[dayKey],
+                sun: !prev[dayKey]?.sun,
             },
         }));
     };
 
-    const openModal = (day) => {
+    // Open the flip view for editing
+    const openEditForm = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         const dayData = selectedDays[dayKey] || {};
         setEditingDay(day);
-        setEditAmount(dayData.amount || 0);
+        setEditAmount(dayData.amount || 50);
         setEditTime(dayData.time || "12:00");
-        setShowModal(true);
+        setIsFlipped(true);
     };
 
     const saveDaySettings = () => {
         const dayKey = format(editingDay, 'yyyy-MM-dd');
-        setSelectedDays((prevSelected) => ({
-            ...prevSelected,
+        setSelectedDays((prev) => ({
+            ...prev,
             [dayKey]: {
-                ...prevSelected[dayKey],
+                ...prev[dayKey],
                 water: editAmount > 0,
                 amount: editAmount,
                 time: editTime,
             },
         }));
-        closeModal();
+        setIsFlipped(false);
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-        setEditingDay(null);
-    };
+    const closeEditForm = () => setIsFlipped(false);
 
     const selectAllDays = () => {
         setSelectedDays((prevSelected) => {
@@ -110,6 +112,7 @@ const Plant = ({ plantId }) => {
 
     return (
         <div className="plant-row">
+            {/* Plant Information */}
             <div className="plant-info">
                 <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
                 <div className="sensor-data">
@@ -135,54 +138,46 @@ const Plant = ({ plantId }) => {
                 </div>
             </div>
 
-            <div className="plant-calendar">
-                <div className="week-navigation">
-                    <button onClick={handlePrevWeek}>{"<"}</button>
-                    <button onClick={selectAllDays}>➕</button>
-                    <button onClick={deselectAllDays}>➖</button>
-                    <button onClick={toggleApplyMode}>{applyMode === "water" ? "💧" : "☀️"}</button>
-                    <button onClick={handleNextWeek}>{">"}</button>
-                </div>
-
-                <div className="week-calendar">
-                    {weekDays.map((day) => {
-                        const dayKey = format(day, 'yyyy-MM-dd');
-                        const dayData = selectedDays[dayKey] || {};
-
-                        return (
-                            <div key={dayKey} className="calendar-day-row" onClick={() => openModal(day)}>
-                                <p className="day-label">{format(day, 'EEE MM/dd')}</p>
-                                <div className="emoji-toggles">
-                                    {dayData.water && <span>💧 {dayData.amount}%</span>}
-                                    {dayData.sun && <span>☀️</span>}
+            {/* Calendar with Flip Effect */}
+            <div className={`calendar-container ${isFlipped ? 'flip' : ''}`}>
+                <div className="front">
+                    <div className="week-navigation">
+                        <button onClick={handlePrevWeek}>{"<"}</button>
+                        <button onClick={selectAllDays}>➕</button>
+                        <button onClick={deselectAllDays}>➖</button>
+                        <button onClick={toggleApplyMode}>{applyMode === "water" ? "💧" : "☀️"}</button>
+                        <button onClick={handleNextWeek}>{">"}</button>
+                    </div>
+                    <div className="week-calendar">
+                        {weekDays.map((day) => {
+                            const dayKey = format(day, 'yyyy-MM-dd');
+                            const dayData = selectedDays[dayKey] || {};
+                            return (
+                                <div key={dayKey} className="calendar-day-row" onClick={() => openEditForm(day)}>
+                                    <p>{format(day, 'EEE MM/dd')}</p>
+                                    <div className="emoji-toggles">
+                                        {dayData.water && <span>💧</span>}
+                                        {dayData.sun && <span>☀️</span>}
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {showModal && (
-                <div className="modal">
-                    <button className="close-button" onClick={closeModal}>✖</button>
-                    <h4>Edit Watering Schedule</h4>
-                    <label>
-                        Time:
-                        <input type="time" value={editTime} onChange={(e) => setEditTime(e.target.value)} />
-                    </label>
-                    <label>
-                        Water Amount:
-                        <input type="range" min="0" max="100" value={editAmount} onChange={(e) => setEditAmount(parseInt(e.target.value))} />
-                        <span>{editAmount}%</span>
-                    </label>
-                    <div className="buttons">
-                        <button onClick={saveDaySettings}>Save</button>
-                        <button onClick={closeModal}>Cancel</button>
+                            );
+                        })}
                     </div>
                 </div>
-            )}
 
-            {/* Chatbot Icon */}
+                {/* Flip Side: Edit Form */}
+                {isFlipped && (
+                    <div className="back">
+                        <h4>Edit Water Schedule</h4>
+                        <label>Time: <input type="time" value={editTime} onChange={(e) => setEditTime(e.target.value)} /></label>
+                        <label>Amount: <input type="range" min="0" max="100" value={editAmount} onChange={(e) => setEditAmount(parseInt(e.target.value))} /></label>
+                        <button onClick={saveDaySettings}>Save</button>
+                        <button onClick={closeEditForm}>Cancel</button>
+                    </div>
+                )}
+            </div>
+
+            {/* Chatbot */}
             <div className="chatbot-icon" onClick={handleChatToggle}>🤖 Chat</div>
             {isChatOpen && <ChatBot plantName={plantName} onClose={handleChatToggle} />}
         </div>
