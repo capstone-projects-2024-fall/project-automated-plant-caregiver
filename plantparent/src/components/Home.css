@@ -1,11 +1,13 @@
 /* General Page and Plant Grid Styling */
 .plant-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two containers per row */
+  grid-template-columns: repeat(2, 1fr); /* Default: Two containers per row */
   gap: 20px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Plant Container Styling */
@@ -23,7 +25,9 @@
   width: 100%; /* Full width within the grid cell */
   box-sizing: border-box;
   position: relative; /* Ensure children are constrained to this container */
-  height: auto; /* Allow the container to expand with its content */
+  min-height: 450px; /* Added minimum height to ensure visibility */
+  overflow: hidden; /* Prevent content overflow */
+  height: auto;
 }
 
 /* Left Section: Plant Info */
@@ -45,6 +49,8 @@
 
 .sensor-data {
   text-align: center;
+  font-size: 0.9rem; /* Adjust font size to fit the container */
+  word-wrap: break-word; /* Ensure long text doesn't overflow */
 }
 
 /* Right Section: Calendar */
@@ -52,13 +58,67 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Align items at the top */
   width: 50%; /* Right half of the container */
   padding: 10px;
   position: relative; /* Ensure children are contained within this section */
+  perspective: 1000px; /* Enable 3D flipping */
+  height: auto; /* Ensure it adjusts dynamically to fit the calendar */
 }
 
-.front, .back {
+.week-calendar {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: flex-start; /* Align text and emojis to the left */
+  gap: 1px; /* Adjust line spacing for days */
+  width: 100%;
+  margin-top: 1px;
+}
+
+.calendar-day-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.7rem;
+  padding: 1px 1px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.calendar-day-row:hover {
+  background-color: #e6f7ff;
+}
+
+.emoji-toggles {
+  display: flex;
+  gap: 3px;
+}
+
+.emoji-toggles span {
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.emoji-toggles span:hover {
+  transform: scale(1.2);
+}
+
+.active-water {
+  color: blue;
+}
+
+.active-sun {
+  color: orange;
+}
+
+/* Flip Styling */
+.front,
+.back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -67,6 +127,7 @@
   top: 0;
   left: 0;
   box-sizing: border-box;
+  padding: 10px;
 }
 
 .front {
@@ -77,6 +138,9 @@
 .back {
   transform: rotateY(180deg);
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add spacing between form fields */
 }
 
 .flip .front {
@@ -89,6 +153,67 @@
   z-index: 2; /* Show the back when flipped */
 }
 
+.back h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.back label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  gap: 4px;
+}
+
+.back input[type="time"],
+.back input[type="range"] {
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.back button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #1abc9c;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back button:hover {
+  background-color: #16a085;
+}
+
+/* Chatbot Overlay Styling */
+.chatbot-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatbot-modal {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  z-index: 10000;
+  padding: 20px;
+}
+
 /* Responsive Design for Smaller Screens */
 @media (max-width: 768px) {
   .plant-grid {
@@ -97,9 +222,35 @@
 
   .plant-row {
     flex-direction: column; /* Stack the plant info and calendar */
+    min-height: 600px; /* Ensure enough space for content */
+    height: auto; /* Let the container grow dynamically */
+    padding: 10px; /* Ensure consistent padding */
+    gap: 0; /* Remove any gap between sections */
   }
 
-  .plant-info, .calendar-container {
+  .plant-info,
+  .calendar-container {
     width: 100%; /* Full width when stacked */
+    flex: none; /* Prevent uneven stretching */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove unnecessary padding */
+    height: auto; /* Allow content to determine height */
+  }
+
+  .plant-info {
+    margin-bottom: -10px; /* Add a small gap specifically between plant info and calendar */
+  }
+
+  .calendar-container {
+    margin-top: 0; /* Eliminate any top margin that pushes the calendar down */
+  }
+
+  .week-calendar {
+    margin: 0; /* Remove all unnecessary spacing above or around the calendar */
+    gap: 5px; /* Smaller gap between rows for better layout */
+  }
+
+  .calendar-day-row {
+    font-size: 0.8rem; /* Adjust font size for readability */
   }
 }

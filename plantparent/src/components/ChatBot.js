@@ -30,27 +30,29 @@ const ChatBot = ({ plantName, onClose }) => {
     };
 
     return (
-        <div className="chatbot-modal">
-            <div className="chatbot-header">
-                <h4>Plant Care Assistant 🌱</h4>
-                <button onClick={onClose}>✖</button>
-            </div>
-            <div className="chatbot-messages">
-                {messages.map((msg, index) => (
-                    <div key={index} className={`chatbot-message ${msg.sender}`}>
-                        {msg.text}
-                    </div>
-                ))}
-            </div>
-            <div className="chatbot-input">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={handleInputChange}
-                    placeholder="Ask me about your plant..."
-                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                />
-                <button onClick={sendMessage}>Send</button>
+        <div className="chatbot-modal-overlay" onClick={onClose}>
+            <div className="chatbot-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="chatbot-header">
+                    <h4>Plant Care Assistant 🌱</h4>
+                    <button onClick={onClose}>✖</button>
+                </div>
+                <div className="chatbot-messages">
+                    {messages.map((msg, index) => (
+                        <div key={index} className={`chatbot-message ${msg.sender}`}>
+                            {msg.text}
+                        </div>
+                    ))}
+                </div>
+                <div className="chatbot-input">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={handleInputChange}
+                        placeholder="Ask me about your plant..."
+                        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                    />
+                    <button onClick={sendMessage}>Send</button>
+                </div>
             </div>
         </div>
     );
