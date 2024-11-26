@@ -1,5 +1,10 @@
 // #include <Arduino.h>
 // #include <Wire.h>
+// #include <BH1750.h>
+// #include <WiFi.h>
+// #include <WiFiClientSecure.h>
+// #include <time.h>
+// #include <Adafruit_seesaw.h>
 
 // void setup() {
 //   Wire.begin(21, 22);  // Use your SDA and SCL pins

@@ -5,6 +5,7 @@
 #include <WiFiClientSecure.h>
 #include <time.h>
 #include <Adafruit_seesaw.h>
+#include <Adafruit_AM2320.h>
 
 // WiFi credentials
 const char* ssid = "Nokia G310";
@@ -22,6 +23,7 @@ const int daylightOffset_sec = 3600; // US observes DST (adds 1 hour)
 // Create an instance of the BH1750 sensor
 BH1750 lightsensor(0x23);
 Adafruit_seesaw soilSensor;
+Adafruit_AM2320 am2320;
 
 // Function to read current time
 std::string getCurrentTime() {
@@ -67,6 +69,12 @@ void setup() {
     } else {
         Serial.println("Soil Moisture Sensor Enabled");
     }
+    //Initialize AM2320
+    if (!am2320.begin()) {
+        Serial.println("AM2320 not found!");
+    } else {
+        Serial.println("AM2320 Enabled");
+    }
 }
 
 void loop() {
@@ -81,12 +89,29 @@ void loop() {
 
     // Read and display soil moisture level
     uint16_t soil_moisture = soilSensor.touchRead(0);
-    Serial.print("Soil Moisture Level: ");
-    Serial.println(soil_moisture);
+    if (soil_moisture == 65535) {
+        Serial.println("Error reading Soil Moisture Sensor");
+    } else {
+        Serial.print("Soil Moisture Level: ");
+        Serial.println(soil_moisture);
+    }
+    // Read and display temperature and humidity
+    float temperature = am2320.readTemperature();
+    float humidity = am2320.readHumidity();
+    if (isnan(temperature) || isnan(humidity)) {
+        Serial.println("Failed to read data from AM2320 sensor");
+    } else {
+        Serial.print("Temperature: ");
+        Serial.print(temperature);
+        Serial.print("°C, Humidity: ");
+        Serial.print(humidity);
+        Serial.println("%");
+    }
     
     // Display current time
     Serial.println(getCurrentTime().c_str());
-    
+    // Space between readings
+    Serial.println("--------------------");
     // Delay between readings
-    delay(1000);
+    delay(5000);
 }
