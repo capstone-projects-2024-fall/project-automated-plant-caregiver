@@ -6,6 +6,7 @@
 #include <time.h>
 #include <Adafruit_seesaw.h>
 #include <Adafruit_AM2320.h>
+#include <FastLED.h>
 
 // WiFi credentials
 const char* ssid = "Nokia G310";
@@ -20,10 +21,15 @@ const int daylightOffset_sec = 3600; // US observes DST (adds 1 hour)
 #define I2C_SDA 21
 #define I2C_SCL 22
 
-// Create an instance of the BH1750 sensor
+// Create instances
 BH1750 lightsensor(0x23);
 Adafruit_seesaw soilSensor;
 Adafruit_AM2320 am2320;
+
+// WS2812B LED settings
+#define LED_PIN 5
+#define NUM_LEDS 120
+CRGB leds[NUM_LEDS];
 
 // Function to read current time
 std::string getCurrentTime() {
@@ -75,6 +81,10 @@ void setup() {
     } else {
         Serial.println("AM2320 Enabled");
     }
+
+    // Initialize FastLED
+    FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.setBrightness(5);  // Set brightness to 50 (range is 0-255)
 }
 
 void loop() {
@@ -108,10 +118,16 @@ void loop() {
         Serial.println("%");
     }
     
+    // Set the color of the LED (example: red color)
+    for (int i = 0; i < NUM_LEDS; i++) {
+        leds[i] = CRGB::Red;
+    }
+    FastLED.show();
+
     // Display current time
     Serial.println(getCurrentTime().c_str());
     // Space between readings
     Serial.println("--------------------");
     // Delay between readings
-    delay(5000);
+    delay(2000);
 }

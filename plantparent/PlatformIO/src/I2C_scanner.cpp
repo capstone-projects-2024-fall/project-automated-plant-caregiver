@@ -5,6 +5,7 @@
 // #include <WiFiClientSecure.h>
 // #include <time.h>
 // #include <Adafruit_seesaw.h>
+// #include <Adafruit_AM2320.h>
 
 // void setup() {
 //   Wire.begin(21, 22);  // Use your SDA and SCL pins
