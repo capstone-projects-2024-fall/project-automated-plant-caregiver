@@ -29,6 +29,7 @@ Adafruit_AM2320 am2320;
 // WS2812B LED settings
 #define LED_PIN 5
 #define NUM_LEDS 120
+#define BRIGHTNESS 5
 CRGB leds[NUM_LEDS];
 
 // Function to read current time
@@ -84,7 +85,7 @@ void setup() {
 
     // Initialize FastLED
     FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
-    FastLED.setBrightness(5);  // Set brightness to 50 (range is 0-255)
+    FastLED.setBrightness(BRIGHTNESS);  // Set brightness to 50 (range is 0-255)
 }
 
 void loop() {
