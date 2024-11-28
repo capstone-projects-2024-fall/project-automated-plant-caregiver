@@ -32,6 +32,10 @@ Adafruit_AM2320 am2320;
 #define BRIGHTNESS 5
 CRGB leds[NUM_LEDS];
 
+// Water pump pin
+#define WATER_PUMP_PIN 23
+#define SOIL_MOISTURE_THRESHOLD 1000
+
 // Function to read current time
 std::string getCurrentTime() {
     struct tm timeinfo;
@@ -84,8 +88,12 @@ void setup() {
     }
 
     // Initialize FastLED
-    FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setBrightness(BRIGHTNESS);  // Set brightness to 50 (range is 0-255)
+
+    // Initialize water pump pin
+    pinMode(WATER_PUMP_PIN, OUTPUT);
+    digitalWrite(WATER_PUMP_PIN, LOW); // Ensure pump is off initially
 }
 
 void loop() {
@@ -106,6 +114,14 @@ void loop() {
         Serial.print("Soil Moisture Level: ");
         Serial.println(soil_moisture);
     }
+    
+    // Check if soil moisture exceeds threshold
+    if (soil_moisture > SOIL_MOISTURE_THRESHOLD) {
+        digitalWrite(WATER_PUMP_PIN, HIGH); // Turn on water pump
+    } else {
+        digitalWrite(WATER_PUMP_PIN, LOW); // Turn off water pump
+    }
+
     // Read and display temperature and humidity
     float temperature = am2320.readTemperature();
     float humidity = am2320.readHumidity();
@@ -131,4 +147,7 @@ void loop() {
     Serial.println("--------------------");
     // Delay between readings
     delay(2000);
+
+    // Add a delay to avoid rapid switching
+    delay(1000);
 }
