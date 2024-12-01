@@ -1,7 +1,8 @@
 /* Container for the entire page */
 .page {
-    align-items: center;
-    justify-content: center;
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align items horizontally */
     min-height: 100vh;
     padding: 20px;
     background-color: #f9f9f9;
@@ -32,6 +33,7 @@ section {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
 /* Google Login Button */
@@ -61,7 +63,7 @@ section {
 
 /* Sign-up Button */
 button.sign-up-button {
-    width: 100%;
+    display: inline-block;
     padding: 10px 20px;
     font-size: 1em;
     margin-top: 10px;

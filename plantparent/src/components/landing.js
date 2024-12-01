@@ -44,6 +44,7 @@ function Landing() {
         
         </section>
 
+        <p></p>
         <button>Sign Up</button>
         </GoogleOAuthProvider>
       </div>

@@ -9,7 +9,6 @@
 /* Side Navigation Styling */
 .side-navigation {
     position: fixed;
-    top: 60px;
     left: 20px;
     width: 250px;
     background: #1e90ff;
@@ -41,7 +40,7 @@
 /* Main Content Styling */
 .about-container {
     margin-left: 300px;
-    padding: 40px;
+    padding: 4px;
     background: white;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);

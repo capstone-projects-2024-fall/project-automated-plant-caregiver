@@ -13,11 +13,11 @@ const Plant = ({ plantId }) => {
     const [applyMode, setApplyMode] = useState("water");
     const [plantName, setPlantName] = useState(`Plant ${plantId}`);
     const [isEditingName, setIsEditingName] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [editingDay, setEditingDay] = useState(null);
-    const [editAmount, setEditAmount] = useState(0);
+    const [editAmount, setEditAmount] = useState(50);
     const [editTime, setEditTime] = useState("12:00");
-    const [isChatOpen, setIsChatOpen] = useState(false);
 
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
@@ -29,33 +29,69 @@ const Plant = ({ plantId }) => {
     const handlePrevWeek = () => setCurrentDate(subDays(currentDate, 7));
     const handleNextWeek = () => setCurrentDate(addDays(currentDate, 7));
 
-    // Toggle water for a specific day
     const toggleWater = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
-        setSelectedDays((prev) => ({
-            ...prev,
-            [dayKey]: {
-                ...prev[dayKey],
-                water: !prev[dayKey]?.water,
-                amount: prev[dayKey]?.amount || 50,
-                time: prev[dayKey]?.time || "12:00",
-            },
-        }));
+        setSelectedDays((prev) => {
+            const updatedDays = { ...prev };
+            if (updatedDays[dayKey]?.water) {
+                updatedDays[dayKey] = { ...updatedDays[dayKey], water: false };
+            } else {
+                updatedDays[dayKey] = { ...updatedDays[dayKey], water: true };
+            }
+            if (!updatedDays[dayKey].water && !updatedDays[dayKey].sun) {
+                delete updatedDays[dayKey]; // Remove day if empty
+            }
+            return updatedDays;
+        });
     };
 
-    // Toggle sun for a specific day
     const toggleSun = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
-        setSelectedDays((prev) => ({
-            ...prev,
-            [dayKey]: {
-                ...prev[dayKey],
-                sun: !prev[dayKey]?.sun,
-            },
-        }));
+        setSelectedDays((prev) => {
+            const updatedDays = { ...prev };
+            if (updatedDays[dayKey]?.sun) {
+                updatedDays[dayKey] = { ...updatedDays[dayKey], sun: false };
+            } else {
+                updatedDays[dayKey] = { ...updatedDays[dayKey], sun: true };
+            }
+            if (!updatedDays[dayKey].water && !updatedDays[dayKey].sun) {
+                delete updatedDays[dayKey]; // Remove day if empty
+            }
+            return updatedDays;
+        });
     };
 
-    // Open the flip view for editing
+    const applyAllDays = () => {
+        const updatedDays = {};
+        weekDays.forEach((day) => {
+            const dayKey = format(day, 'yyyy-MM-dd');
+            updatedDays[dayKey] = {
+                ...selectedDays[dayKey],
+                [applyMode]: true,
+            };
+        });
+        setSelectedDays((prev) => ({ ...prev, ...updatedDays }));
+    };
+
+    const deselectAllDays = () => {
+        const updatedDays = {};
+        weekDays.forEach((day) => {
+            const dayKey = format(day, 'yyyy-MM-dd');
+            if (selectedDays[dayKey]) {
+                updatedDays[dayKey] = {
+                    ...selectedDays[dayKey],
+                    [applyMode]: false,
+                };
+                if (!updatedDays[dayKey].water && !updatedDays[dayKey].sun) {
+                    delete updatedDays[dayKey];
+                }
+            }
+        });
+        setSelectedDays((prev) => ({ ...prev, ...updatedDays }));
+    };
+
+    const toggleApplyMode = () => setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
+
     const openEditForm = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         const dayData = selectedDays[dayKey] || {};
@@ -72,6 +108,7 @@ const Plant = ({ plantId }) => {
             [dayKey]: {
                 ...prev[dayKey],
                 water: editAmount > 0,
+                sun: prev[dayKey]?.sun || false,
                 amount: editAmount,
                 time: editTime,
             },
@@ -81,38 +118,10 @@ const Plant = ({ plantId }) => {
 
     const closeEditForm = () => setIsFlipped(false);
 
-    const selectAllDays = () => {
-        setSelectedDays((prevSelected) => {
-            const updatedDays = { ...prevSelected };
-            weekDays.forEach((day) => {
-                const dayKey = format(day, 'yyyy-MM-dd');
-                if (applyMode === "water") {
-                    updatedDays[dayKey] = {
-                        ...updatedDays[dayKey],
-                        water: true,
-                        amount: 50,
-                        time: "12:00",
-                    };
-                } else if (applyMode === "sun") {
-                    updatedDays[dayKey] = {
-                        ...updatedDays[dayKey],
-                        sun: true,
-                    };
-                }
-            });
-            return updatedDays;
-        });
-    };
-
-    const deselectAllDays = () => setSelectedDays({});
-
-    const toggleApplyMode = () => setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
-
     const handleChatToggle = () => setIsChatOpen(!isChatOpen);
 
     return (
         <div className="plant-row">
-            {/* Plant Information */}
             <div className="plant-info">
                 <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
                 <div className="sensor-data">
@@ -136,16 +145,21 @@ const Plant = ({ plantId }) => {
                         </>
                     )}
                 </div>
+
+                <button className="ai-chat-button" onClick={handleChatToggle}>
+                    {isChatOpen ? "Close Chat" : "Chat with Your Plant"}
+                </button>
+                <div className="chatbot-icon" onClick={handleChatToggle}>🤖</div>
             </div>
 
-            {/* Calendar with Flip Effect */}
             <div className={`calendar-container ${isFlipped ? 'flip' : ''}`}>
                 <div className="front">
+                    <h4>Watering & Sun Schedule</h4>
                     <div className="week-navigation">
                         <button onClick={handlePrevWeek}>{"<"}</button>
-                        <button onClick={selectAllDays}>➕</button>
-                        <button onClick={deselectAllDays}>➖</button>
-                        <button onClick={toggleApplyMode}>{applyMode === "water" ? "💧" : "☀️"}</button>
+                        <button onClick={applyAllDays}>➕ {applyMode === "water" ? "💧" : "☀️"}</button>
+                        <button onClick={deselectAllDays}>➖ {applyMode === "water" ? "💧" : "☀️"}</button>
+                        <button onClick={toggleApplyMode}>{applyMode === "water" ? "☀️" : "💧"}</button>
                         <button onClick={handleNextWeek}>{">"}</button>
                     </div>
                     <div className="week-calendar">
@@ -153,11 +167,32 @@ const Plant = ({ plantId }) => {
                             const dayKey = format(day, 'yyyy-MM-dd');
                             const dayData = selectedDays[dayKey] || {};
                             return (
-                                <div key={dayKey} className="calendar-day-row" onClick={() => openEditForm(day)}>
-                                    <p>{format(day, 'EEE MM/dd')}</p>
+                                <div key={dayKey} className="calendar-day-row">
+                                    {/* Only the day name triggers the flip */}
+                                    <p onClick={() => openEditForm(day)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+                                        {format(day, 'EEE MM/dd')}
+                                    </p>
                                     <div className="emoji-toggles">
-                                        {dayData.water && <span>💧</span>}
-                                        {dayData.sun && <span>☀️</span>}
+                                        {/* Toggle water and prevent propagation */}
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent flipping when toggling water
+                                                toggleWater(day);
+                                            }}
+                                            style={{ opacity: dayData.water ? 1 : 0.3 }}
+                                        >
+                                            💧
+                                        </span>
+                                        {/* Toggle sun and prevent propagation */}
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent flipping when toggling sun
+                                                toggleSun(day);
+                                            }}
+                                            style={{ opacity: dayData.sun ? 1 : 0.3 }}
+                                        >
+                                            ☀️
+                                        </span>
                                     </div>
                                 </div>
                             );
@@ -165,20 +200,33 @@ const Plant = ({ plantId }) => {
                     </div>
                 </div>
 
-                {/* Flip Side: Edit Form */}
                 {isFlipped && (
                     <div className="back">
                         <h4>Edit Water Schedule</h4>
-                        <label>Time: <input type="time" value={editTime} onChange={(e) => setEditTime(e.target.value)} /></label>
-                        <label>Amount: <input type="range" min="0" max="100" value={editAmount} onChange={(e) => setEditAmount(parseInt(e.target.value))} /></label>
+                        <label>
+                            Time:{" "}
+                            <input
+                                type="time"
+                                value={editTime}
+                                onChange={(e) => setEditTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Amount:{" "}
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={editAmount}
+                                onChange={(e) => setEditAmount(parseInt(e.target.value))}
+                            />
+                        </label>
                         <button onClick={saveDaySettings}>Save</button>
                         <button onClick={closeEditForm}>Cancel</button>
                     </div>
                 )}
             </div>
 
-            {/* Chatbot */}
-            <div className="chatbot-icon" onClick={handleChatToggle}>🤖 Chat</div>
             {isChatOpen && <ChatBot plantName={plantName} onClose={handleChatToggle} />}
         </div>
     );
