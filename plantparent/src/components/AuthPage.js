@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthPage.css';
+import { AuthContext } from './AuthContext'; // Correct import for same folder
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);  // Toggle between login and signup
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   const handleToggle = () => {
@@ -16,7 +20,7 @@ const AuthPage = () => {
       username: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     });
   };
 
@@ -26,14 +30,23 @@ const AuthPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (isLogin) {
-      console.log('Logging in with:', formData.username, formData.password);
+      const user = { email: formData.email, password: formData.password };
+      login(user); // Call login from AuthContext
+      navigate('/profile'); // Redirect to profile page
     } else {
-      if (formData.password === formData.confirmPassword) {
-        console.log('Signing up with:', formData.username, formData.email, formData.password);
-      } else {
+      if (formData.password !== formData.confirmPassword) {
         alert('Passwords do not match!');
+        return;
       }
+      const user = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      };
+      login(user); // Call login from AuthContext
+      navigate('/profile'); // Redirect to profile page
     }
   };
 
