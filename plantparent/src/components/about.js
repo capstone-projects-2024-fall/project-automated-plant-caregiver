@@ -102,10 +102,21 @@ function About() {
                   <h4>Let's take our plants from struggling to thriving!</h4>
                   <div className="plant-images">
                      <img src={plantImage1} alt="Struggling plant" className="plant-photo" />
-                     <span className="arrow">➡️</span>
+                     <span className="arrow">⬇️</span>
                      <img src={plantImage2} alt="Flourishing plant" className="plant-photo" />
                   </div>
                </div>
+            </section>
+
+            <section id="benefits">
+               <h3>🌟 Why Choose Plant Parent?</h3>
+               <p>Plant Parent takes the guesswork out of plant care, helping you:</p>
+               <ul>
+                  <li>Save time by automating routine plant care tasks.</li>
+                  <li>Enjoy healthier, thriving plants with expert guidance.</li>
+                  <li>Customize care schedules to fit your busy lifestyle.</li>
+                  <li>Gain peace of mind with real-time alerts and notifications.</li>
+               </ul>
             </section>
          </main>
       </div>

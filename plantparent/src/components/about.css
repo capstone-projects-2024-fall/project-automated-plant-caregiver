@@ -1,91 +1,193 @@
 /* Page Layout */
 .about-page {
     display: flex;
-    background: #e9f7fe;
-    padding: 20px;
+    flex-direction: row;
+    background: #f9fbfd; /* Softer background color for better readability */
+    padding: 0;
     min-height: 100vh;
 }
 
 /* Side Navigation Styling */
 .side-navigation {
-    position: fixed;
-    left: 20px;
-    width: 250px;
+    position: sticky;
+    top: 0;
+    width: 25%;
+    height: 100vh;
     background: #1e90ff;
-    border-radius: 15px;
+    border-radius: 0 15px 15px 0;
     padding: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
     color: white;
+    overflow-y: auto; /* Enable scrolling for long menus */
 }
 
 .side-navigation h4 {
     font-size: 1.5em;
     margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid white;
 }
 
 .side-navigation a {
     display: block;
-    padding: 12px;
+    padding: 12px 15px;
     margin: 8px 0;
     text-decoration: none;
     color: white;
     border-radius: 8px;
-    transition: background 0.3s;
+    transition: background 0.3s ease, transform 0.3s ease;
+    font-size: 1.1em;
 }
 
 .side-navigation a:hover {
     background: #66b2ff;
+    transform: translateX(5px); /* Slight hover movement */
 }
 
 /* Main Content Styling */
 .about-container {
-    margin-left: 300px;
-    padding: 4px;
+    flex: 1;
+    padding: 30px;
     background: white;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
+    margin-left: 20px;
+    max-width: 75%;
 }
 
-.section {
-    margin-bottom: 50px;
-}
-
-.section h2,
-.section h3 {
-    color: #34495e;
+/* Section Styling */
+.about-container > section {
     margin-bottom: 20px;
-    border-bottom: 3px solid #1e90ff;
-    display: inline-block;
+    padding: 20px;
+    border-left: 5px solid #1e90ff;
+    background: #f9f9f9;
+    border-radius: 10px;
 }
 
-.section p {
-    line-height: 1.6;
+/* Section Headers */
+.about-container > section h2,
+.about-container > section h3 {
+    color: #34495e;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+/* Paragraphs */
+.about-container > section p {
+    line-height: 1.5;
+    margin-bottom: 15px;
     color: #555;
+    font-size: 1em;
 }
 
+/* Bullet Points */
 ul {
-    padding-left: 20px;
-    margin-top: 15px;
+    padding-left: 25px;
+    margin: 10px 0;
+    list-style: none;
 }
 
 ul li {
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+ul li::before {
+    content: '✔'; /* Add a checkmark icon */
+    color: #1e90ff;
+    margin-right: 10px;
+    font-size: 1.2em;
 }
 
 /* Image Styling */
 .plant-photo {
-    width: 100%;
+    width: auto;
+    max-width: 400px;
+    height: auto;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 15px auto;
+    display: block; /* Center images */
 }
 
+/* Wow Section for Images */
 .wow-section {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .arrow {
-    font-size: 3em;
+    font-size: 2.5em;
     color: #1e90ff;
+    margin: 0 5px;
+}
+
+/* Key Features Section Styling */
+#features ul {
+    padding-left: 25px; /* Proper indentation for the list */
+    margin: 15px 0; /* Add spacing around the list */
+    list-style: none; /* Remove default bullet points */
+}
+
+#features ul li {
+    margin-bottom: 15px; /* Space between list items */
+    line-height: 1.8; /* Increase line height for readability */
+    display: flex;
+    flex-wrap: wrap; /* Ensure long text wraps properly */
+    align-items: flex-start;
+}
+
+#features ul li strong {
+    margin-right: 10px; /* Add spacing after the bold text */
+    font-weight: bold;
+    color: #34495e;
+    white-space: nowrap; /* Prevent text from breaking awkwardly */
+}
+
+#features ul li span {
+    flex: 1; /* Allow the remaining text to take up available space */
+    color: #555;
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+/* Section Styling */
+.about-container > section {
+    margin-bottom: 30px; /* Space between sections */
+    padding: 20px;
+    border-left: 5px solid #1e90ff;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .about-page {
+        flex-direction: column;
+    }
+
+    .side-navigation {
+        position: relative;
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+
+    .about-container {
+        margin-left: 0;
+        padding: 15px;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .plant-photo {
+        max-width: 300px;
+    }
+
+    .arrow {
+        font-size: 2em;
+    }
 }
