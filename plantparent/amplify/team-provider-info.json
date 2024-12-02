@@ -15,7 +15,7 @@
       "function": {
         "plantData": {
           "deploymentBucketName": "amplify-plantprojectfixv3-dev-56608-deployment",
-          "s3Key": "amplify-builds/plantData-4c69352f4e67566b2b79-build.zip"
+          "s3Key": "amplify-builds/plantData-375a756d48564f694544-build.zip"
         }
       },
       "api": {

@@ -9,10 +9,11 @@ const Plant = ({ plantId }) => {
     const [error, setError] = useState(null);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDays, setSelectedDays] = useState({});
-    const [applyMode, setApplyMode] = useState("water"); // Mode for the plus button
-    const [plantName, setPlantName] = useState(`Plant ${plantId}`); // State for plant name
-    const [isEditingName, setIsEditingName] = useState(false); // Track if the name is being edited
+    const [applyMode, setApplyMode] = useState("water");
+    const [plantName, setPlantName] = useState(`Plant ${plantId}`);
+    const [isEditingName, setIsEditingName] = useState(false);
 
+    // Fetch the most recent sensor data when the component mounts
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
     }, []);
@@ -23,7 +24,6 @@ const Plant = ({ plantId }) => {
     const handlePrevWeek = () => setCurrentDate(subDays(currentDate, 7));
     const handleNextWeek = () => setCurrentDate(addDays(currentDate, 7));
 
-    // Toggle water icon for an individual day
     const toggleWater = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
         setSelectedDays((prevSelected) => ({
@@ -34,7 +34,6 @@ const Plant = ({ plantId }) => {
             },
         }));
     };
-
 
     const toggleSun = (day) => {
         const dayKey = format(day, 'yyyy-MM-dd');
@@ -47,25 +46,22 @@ const Plant = ({ plantId }) => {
         }));
     };
 
-
     const applyAllDays = () => {
         const updatedDays = {};
         weekDays.forEach((day) => {
             const dayKey = format(day, 'yyyy-MM-dd');
             updatedDays[dayKey] = {
                 ...selectedDays[dayKey],
-                [applyMode]: true
+                [applyMode]: true,
             };
         });
         setSelectedDays((prevSelected) => ({ ...prevSelected, ...updatedDays }));
     };
 
-    // toggle
     const toggleApplyMode = () => {
         setApplyMode((prevMode) => (prevMode === "water" ? "sun" : "water"));
     };
 
-    //  plant name ???
     const handleNameChange = (e) => setPlantName(e.target.value);
     const saveName = () => setIsEditingName(false);
 
@@ -99,11 +95,10 @@ const Plant = ({ plantId }) => {
                     )}
                 </div>
 
-                {/* Light green button to go to AI Chat */}
                 <button
                     className="ai-chat-button"
                     onClick={() => {
-                        window.location.href = '/ai-chat'; // here is the route area
+                        window.location.href = '/ai-chat';
                     }}
                 >
                     Chat with Your Plant
@@ -147,4 +142,3 @@ const Plant = ({ plantId }) => {
 };
 
 export default Plant;
-
