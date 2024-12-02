@@ -1,32 +1,28 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-plantparent-dev-b979d-authRole",
-      "UnauthRoleArn": "arn:aws:iam::120569646312:role/amplify-plantparent-dev-b979d-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::120569646312:role/amplify-plantparent-dev-b979d-authRole",
+      "AuthRoleName": "amplify-plantprojectfixv3-dev-56608-authRole",
+      "UnauthRoleArn": "arn:aws:iam::120569646312:role/amplify-plantprojectfixv3-dev-56608-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::120569646312:role/amplify-plantprojectfixv3-dev-56608-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-plantparent-dev-b979d-deployment",
-      "UnauthRoleName": "amplify-plantparent-dev-b979d-unauthRole",
-      "StackName": "amplify-plantparent-dev-b979d",
-      "StackId": "arn:aws:cloudformation:us-east-1:120569646312:stack/amplify-plantparent-dev-b979d/29139890-93f7-11ef-b820-0affc56c5a05",
-      "AmplifyAppId": "dxagd1ksocllo",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-plantparent-dev-b979d-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "DeploymentBucketName": "amplify-plantprojectfixv3-dev-56608-deployment",
+      "UnauthRoleName": "amplify-plantprojectfixv3-dev-56608-unauthRole",
+      "StackName": "amplify-plantprojectfixv3-dev-56608",
+      "StackId": "arn:aws:cloudformation:us-east-1:120569646312:stack/amplify-plantprojectfixv3-dev-56608/d2f77ed0-b067-11ef-984a-0affdf929687",
+      "AmplifyAppId": "d1myd447r0jkk3"
     },
     "categories": {
       "function": {
-        "sensorDataHandler": {
-          "deploymentBucketName": "amplify-plantparent-dev-b979d-deployment",
-          "s3Key": "amplify-builds/sensorDataHandler-78736b67674267337647-build.zip"
+        "plantData": {
+          "deploymentBucketName": "amplify-plantprojectfixv3-dev-56608-deployment",
+          "s3Key": "amplify-builds/plantData-4c69352f4e67566b2b79-build.zip"
         }
       },
-      "auth": {
-        "plantparent": {}
+      "api": {
+        "plantDataAPIV3": {}
       },
       "storage": {
-        "dataStorage": {}
-      },
-      "api": {
-        "api08188476": {}
+        "plantDataV3": {}
       }
     }
   }

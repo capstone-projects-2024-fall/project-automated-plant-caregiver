@@ -1,0 +1,14 @@
+{
+  "resourceName": "plantDataV3",
+  "tableName": "plantDataV3",
+  "partitionKey": {
+    "fieldName": "y",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "timestamp",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

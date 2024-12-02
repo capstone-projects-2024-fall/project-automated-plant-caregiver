@@ -1,6 +1,6 @@
 {
   "api": {
-    "api08188476": {
+    "plantDataAPIV3": {
       "dependsOn": [
         {
           "attributes": [
@@ -8,54 +8,25 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     }
   },
-  "auth": {
-    "plantparent": {
-      "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito",
-      "serviceType": "managed"
-    }
-  },
   "function": {
-    "sensorDataHandler": {
+    "plantData": {
       "build": true,
       "dependsOn": [
         {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
           "attributes": [
             "Name",
-            "Arn"
+            "Arn",
+            "StreamArn"
           ],
           "category": "storage",
-          "resourceName": "dataStorage"
+          "resourceName": "plantDataV3"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -63,25 +34,25 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_sensorDataHandler_deploymentBucketName": {
+    "AMPLIFY_function_plantData_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
         }
       ]
     },
-    "AMPLIFY_function_sensorDataHandler_s3Key": {
+    "AMPLIFY_function_plantData_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
         }
       ]
     }
   },
   "storage": {
-    "dataStorage": {
+    "plantDataV3": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }
