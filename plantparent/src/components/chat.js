@@ -91,24 +91,30 @@ const Chat = () => {
   ]);
   const [input, setInput] = useState('');
 
-  // Function to handle sending a message
-  const sendMessage = () => {
-    if (input.trim()) {
-      const newMessage = { text: input, sender: 'user' };
-      setMessages([...messages, newMessage]);
-      setInput('');  // Clear input field
+  const handleInputChange = (e) => setInput(e.target.value);
 
-      // Simulate AI response
-      simulateAIResponse(input);
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { text: input, sender: 'user' };
+    setMessages([...messages, userMessage]);
+    setInput('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+      const data = await response.json();
+
+      const botMessage = { text: data.response, sender: 'ai' };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage = { text: 'Sorry, something went wrong. Please try again later.', sender: 'ai' };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
-  };
-
-  // Function to simulate AI response (you can replace this with an actual API call)
-  const simulateAIResponse = (userMessage) => {
-    setTimeout(() => {
-      const aiResponse = `You said: "${userMessage}"`; // Placeholder AI response
-      setMessages((prevMessages) => [...prevMessages, { text: aiResponse, sender: 'ai' }]);
-    }, 1000);  // Simulate a 1-second delay for the AI response
   };
 
   return (
@@ -134,8 +140,9 @@ const Chat = () => {
         <Input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInputChange}
           placeholder="Type your message..."
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
         />
         <SendButton onClick={sendMessage}>Send</SendButton>
       </InputContainer>
