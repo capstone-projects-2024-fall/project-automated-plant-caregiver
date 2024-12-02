@@ -1,91 +1,143 @@
-/* Container for the entire page */
+/* Page Container */
 .page {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Ensure content starts at the top */
     min-height: 100vh;
-    padding: 20px;
+    text-align: center;
     background-color: #f9f9f9;
+    background-image: url('plant_background.png');
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: left, right;
+    padding: 20px;
     color: #333;
 }
 
-/* Title styling */
-h1 {
-    font-size: 2.5em;
-    color: #2c3e50;
-    margin-bottom: 10px;
+/* Hero Section */
+.hero {
+    text-align: center;
+    background: linear-gradient(180deg, #3da1e8, #56ab2f);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    animation: fadeIn 1.5s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Authenticator (Login Section) */
+.login-section {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0; /* Ensure spacing above and below */
+    text-align: center;
+    z-index: 1;
+}
+
+/* Additional Content Section */
+.content {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
     text-align: center;
 }
 
-p {
-    font-size: 1.2em;
-    color: #555;
+/* How It Works Section */
+.how-it-works {
+    max-width: 800px;
+    background-color: rgba(144, 238, 144, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.how-it-works h2 {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Tutorial Section */
+.tutorial-section {
+    max-width: 800px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 40px auto 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.tutorial-section h2 {
+    font-size: 2em;
+    color: #2c3e50;
     margin-bottom: 20px;
     text-align: center;
 }
 
-/* Section for login and sign-up */
-section {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Fade-In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-/* Google Login Button */
-.google-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4285f4;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 15px;
-    transition: background-color 0.3s ease;
-}
-
-.google-button:hover {
-    background-color: #357ae8;
-}
-
-.google-icon {
-    height: 20px;
-    margin-right: 10px;
-}
-
-/* Sign-up Button */
-button.sign-up-button {
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 1em;
-    margin-top: 10px;
-    background-color: #1abc9c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button.sign-up-button:hover {
-    background-color: #16a085;
-}
-
-/* Responsive Adjustments For Mobile Devices */
+/* Responsive Design */
 @media (max-width: 768px) {
-    h1 {
+    .page {
+        background-size: 100%;
+        background-position: center;
+    }
+
+    .hero {
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
         font-size: 2em;
     }
-    p {
-        font-size: 1em;
+
+    .hero p {
+        font-size: 1.2em;
     }
-    section {
-        width: 90%;
+
+    .how-it-works h2 {
+        font-size: 1.8em;
+    }
+
+    .steps {
+        flex-direction: column;
+        gap: 15px;
     }
 }
