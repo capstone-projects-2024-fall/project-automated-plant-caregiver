@@ -23,6 +23,9 @@
       },
       "storage": {
         "plantDataV3": {}
+      },
+      "auth": {
+        "plantprojectfixv3b7916566": {}
       }
     }
   }
