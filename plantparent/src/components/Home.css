@@ -270,3 +270,17 @@
     font-size: 0.8rem; /* Adjust font size for readability */
   }
 }
+.ai-chat-button {
+    background-color: ##98FB98; /* lighter green color ehgre */
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.ai-chat-button:hover {
+    background-color: #76c776;
+}
