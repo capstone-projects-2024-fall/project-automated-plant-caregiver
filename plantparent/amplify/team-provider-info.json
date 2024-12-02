@@ -26,6 +26,12 @@
       },
       "auth": {
         "plantprojectfixv3b7916566": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1myd447r0jkk3",
+          "type": "cicd"
+        }
       }
     }
   }
