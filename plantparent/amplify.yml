@@ -1,0 +1,17 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd plantparent  # Change to the React app directory
+        - npm install  # Install dependencies
+    build:
+      commands:
+        - npm run build  # Run build in the plantparent directory
+  artifacts:
+    baseDirectory: plantparent/build  # Point to the correct output directory
+    files:
+      - '**/*'  # Include all files in the build folder
+  cache:
+    paths:
+      - node_modules/**/*  # Cache node_modules for faster builds
