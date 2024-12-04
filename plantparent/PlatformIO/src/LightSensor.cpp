@@ -13,6 +13,13 @@ bool LightSensor::initialize() {
 SensorData LightSensor::readData() {
     SensorData data;
     data.lux = sensor.readLightLevel();
+
+    // Error handling for invalid data
+    if (data.lux < 0 || data.lux > 65535 || isnan(data.lux)) { // Adjust the range based on your sensor's specifications
+        Serial.println("Invalid light sensor reading");
+        data.lux = -999; // Set to a default invalid value
+    }
+
     return data;
 }
 

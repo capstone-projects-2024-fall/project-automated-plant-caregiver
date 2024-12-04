@@ -13,6 +13,13 @@ bool SoilMoistureSensor::initialize() {
 SensorData SoilMoistureSensor::readData() {
     SensorData data;
     data.moisture = sensor.touchRead(0);
+
+    // Error handling for invalid data
+    if (data.moisture < 0 || data.moisture > 3000 || isnan(data.moisture)) { // Adjust the range based on your sensor's specifications
+        Serial.println("Invalid soil moisture reading");
+        data.moisture = -999; // Set to a default invalid value
+    }
+
     return data;
 }
 
