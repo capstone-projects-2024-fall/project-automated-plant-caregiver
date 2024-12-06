@@ -3,6 +3,9 @@ const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 const { OpenAI } = require("openai"); // Correct import for v4.0+
 require("dotenv").config(); // Load environment variables
+const multer = require("multer");   // Including photo upload support
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 const app = express();
 const port = 3001;
@@ -80,32 +83,40 @@ app.get("/class", (req, res) => {
 });
 
 // ChatBot Endpoint
-app.post("/api/chat", async (req, res) => {
+app.post("/api/chat", upload.single("photo"), async (req, res) => {
     const { message, plantName } = req.body;
-    if (!message) {
-        console.error("Message is missing in the request.");
-        return res.status(400).json({ error: "Message is required" });
+    const photo = req.file; // Uploaded photo
+
+    if (!message && !photo) {
+        return res.status(400).json({ error: "Message or photo is required" });
     }
 
-    try {
-        console.log(`Received message: ${message}`);
-        const response = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [
-                { role: "system", content: `You are a plant care expert. The plant's name is ${plantName}.` },
-                { role: "user", content: message },
-            ],
-            max_tokens: 50,
-            temperature: 0.7,
-        });
+    let botMessage = "";
 
-        const botResponse = response.choices[0]?.message.content.trim();
-        console.log(`Bot response: ${botResponse}`);
-        res.json({ response: botResponse });
-    } catch (error) {
-        console.error("Error in chatbot response:", error.message || error);
-        res.status(500).json({ error: "Failed to get response from AI" });
+    if (photo) {
+        botMessage = `I see the photo you uploaded for ${plantName}. It looks great!`;
+        console.log(`Received photo: ${photo.originalname}`);
+    } else {
+        try {
+            console.log(`Received message: ${message}`);
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { role: "system", content: `You are a plant care expert. The plant's name is ${plantName}.` },
+                    { role: "user", content: message },
+                ],
+                max_tokens: 50,
+                temperature: 0.7,
+            });
+
+            botMessage = response.choices[0]?.message.content.trim();
+        } catch (error) {
+            console.error("Error in chatbot response:", error.message || error);
+            return res.status(500).json({ error: "Failed to get response from AI" });
+        }
     }
+
+    res.json({ response: botMessage });
 });
 
 // Start the server and initialize serial connection
