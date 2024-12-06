@@ -54,6 +54,7 @@ const ChatBot = ({ plantName, onClose }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: input, plantName }),
+
             });
             const data = await response.json();
 

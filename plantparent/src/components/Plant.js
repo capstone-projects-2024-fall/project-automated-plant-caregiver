@@ -212,6 +212,7 @@ const Plant = ({ plantId }) => {
                             const dayData = selectedDays[dayKey] || {};
                             return (
                                 <div key={dayKey} className="calendar-day-row">
+                                    {/* Only the day name triggers the flip */}
                                     <p onClick={() => openEditForm(day)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                                         {format(day, 'EEE MM/dd')}
                                     </p>
