@@ -18,10 +18,38 @@ const Plant = ({ plantId }) => {
     const [editingDay, setEditingDay] = useState(null);
     const [editAmount, setEditAmount] = useState(50);
     const [editTime, setEditTime] = useState("12:00");
+    const [plantImage, setPlantImage] = useState(plantImg); // Default plant image
 
     useEffect(() => {
         fetchSensorData(setSensorData, setError);
-    }, []);
+
+        // Load plant data from localStorage
+        const storedPlants = JSON.parse(localStorage.getItem('plants')) || {};
+        if (storedPlants[plantId]) {
+            setPlantName(storedPlants[plantId].name || `Plant ${plantId}`);
+            setPlantImage(storedPlants[plantId].image || plantImg);
+        }
+    }, [plantId]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imageUrl = reader.result;
+                setPlantImage(imageUrl);
+
+                // Save the new image to localStorage
+                const storedPlants = JSON.parse(localStorage.getItem('plants')) || {};
+                storedPlants[plantId] = {
+                    name: plantName,
+                    image: imageUrl,
+                };
+                localStorage.setItem('plants', JSON.stringify(storedPlants));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
     const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -123,7 +151,23 @@ const Plant = ({ plantId }) => {
     return (
         <div className="plant-row">
             <div className="plant-info">
-                <img src={plantImg} alt={`Plant ${plantId}`} className="plant-image" />
+                <div className="plant-image-wrapper">
+                    <img src={plantImage} alt={`Plant ${plantId}`} className="plant-image" />
+                    <span
+                        className="change-image-emoji"
+                        title="Change Image"
+                        onClick={() => document.getElementById(`fileInput-${plantId}`).click()}
+                    >
+                        🌟
+                    </span>
+                    <input
+                        id={`fileInput-${plantId}`}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
+                    />
+                </div>
                 <div className="sensor-data">
                     {isEditingName ? (
                         <input
@@ -173,20 +217,18 @@ const Plant = ({ plantId }) => {
                                         {format(day, 'EEE MM/dd')}
                                     </p>
                                     <div className="emoji-toggles">
-                                        {/* Toggle water and prevent propagation */}
                                         <span
                                             onClick={(e) => {
-                                                e.stopPropagation(); // Prevent flipping when toggling water
+                                                e.stopPropagation();
                                                 toggleWater(day);
                                             }}
                                             style={{ opacity: dayData.water ? 1 : 0.3 }}
                                         >
                                             💧
                                         </span>
-                                        {/* Toggle sun and prevent propagation */}
                                         <span
                                             onClick={(e) => {
-                                                e.stopPropagation(); // Prevent flipping when toggling sun
+                                                e.stopPropagation();
                                                 toggleSun(day);
                                             }}
                                             style={{ opacity: dayData.sun ? 1 : 0.3 }}

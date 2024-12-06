@@ -83,6 +83,7 @@
 .chatbot-input {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .chatbot-input input {
@@ -104,8 +105,23 @@
     transition: background-color 0.3s ease;
 }
 
+.chatbot-input .photo-upload-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
 .chatbot-input button:hover {
     background-color: #16a085;
+}
+
+.chatbot-photo {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 8px;
+    margin-top: 5px;
 }
 
 /* Animation for chatbot modal */

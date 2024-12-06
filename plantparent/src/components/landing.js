@@ -2,6 +2,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSeedling, faCalendarAlt, faRobot, faComments } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './landing.css';
 
 const handleLoginSuccess = (response) => {
@@ -13,6 +14,12 @@ const handleLoginFailure = (error) => {
 };
 
 function Landing() {
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const handleSignUpClick = () => {
+        navigate('/AuthPage'); // Navigate to the AuthPage route
+    };
+
     return (
         <div className="page">
             {/* Hero Section */}
@@ -43,7 +50,9 @@ function Landing() {
                             </button>
                         )}
                     />
-                    <button className="sign-up-button">Sign Up</button>
+                    <button className="sign-up-button" onClick={handleSignUpClick}>
+                        Sign Up
+                    </button>
                 </section>
             </GoogleOAuthProvider>
 
