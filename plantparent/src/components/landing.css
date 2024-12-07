@@ -48,44 +48,6 @@
     text-align: center; /* Center the text and buttons */
 }
 
-/* Buttons */
-.google-button, .sign-up-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    margin: 10px auto; /* Center the buttons */
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.google-button {
-    background-color: #4285f4;
-    color: white;
-}
-
-.google-button:hover {
-    background-color: #357ae8;
-}
-
-.sign-up-button {
-    background-color: #1abc9c;
-    color: white;
-}
-
-.sign-up-button:hover {
-    background-color: #16a085;
-}
-
-.google-icon {
-    height: 20px;
-    margin-right: 10px;
-}
-
 /* How It Works Section */
 .how-it-works {
     max-width: 800px;
