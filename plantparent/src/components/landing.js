@@ -1,4 +1,4 @@
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSeedling, faCalendarAlt, faRobot, faComments } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
@@ -28,33 +28,6 @@ function Landing() {
                 <p>Your Automated Plant Caregiver</p>
             </div>
 
-            {/* Login Section */}
-            <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                <section className="login-section">
-                    <h2>Login or Sign Up</h2>
-                    <GoogleLogin
-                        onSuccess={handleLoginSuccess}
-                        onError={handleLoginFailure}
-                        render={(renderProps) => (
-                            <button
-                                className="google-button"
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}
-                            >
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                                    alt="Google icon"
-                                    className="google-icon"
-                                />
-                                Login with Google
-                            </button>
-                        )}
-                    />
-                    <button className="sign-up-button" onClick={handleSignUpClick}>
-                        Sign Up
-                    </button>
-                </section>
-            </GoogleOAuthProvider>
 
             {/* How It Works Section */}
             <section className="how-it-works">
