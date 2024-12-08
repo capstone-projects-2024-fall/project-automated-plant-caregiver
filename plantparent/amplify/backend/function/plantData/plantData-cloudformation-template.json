@@ -16,13 +16,17 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagedataStorageName": {
+    "storageplantDataV3Name": {
       "Type": "String",
-      "Default": "storagedataStorageName"
+      "Default": "storageplantDataV3Name"
     },
-    "storagedataStorageArn": {
+    "storageplantDataV3Arn": {
       "Type": "String",
-      "Default": "storagedataStorageArn"
+      "Default": "storageplantDataV3Arn"
+    },
+    "storageplantDataV3StreamArn": {
+      "Type": "String",
+      "Default": "storageplantDataV3StreamArn"
     }
   },
   "Conditions": {
@@ -55,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "sensorDataHandler",
+            "plantData",
             {
               "Fn::Join": [
                 "",
                 [
-                  "sensorDataHandler",
+                  "plantData",
                   "-",
                   {
                     "Ref": "env"
@@ -77,6 +81,15 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "STORAGE_PLANTDATAV3_NAME": {
+              "Ref": "storageplantDataV3Name"
+            },
+            "STORAGE_PLANTDATAV3_ARN": {
+              "Ref": "storageplantDataV3Arn"
+            },
+            "STORAGE_PLANTDATAV3_STREAMARN": {
+              "Ref": "storageplantDataV3StreamArn"
             }
           }
         },
@@ -97,12 +110,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "plantparentLambdaRolebd06da3f",
+            "plantprojectfixv3LambdaRole81d1fd7a",
             {
               "Fn::Join": [
                 "",
                 [
-                  "plantparentLambdaRolebd06da3f",
+                  "plantprojectfixv3LambdaRole81d1fd7a",
                   "-",
                   {
                     "Ref": "env"
@@ -168,28 +181,56 @@
                   }
                 ]
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
             {
               "Effect": "Allow",
               "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
                 "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*",
+                "dynamodb:PartiQLUpdate",
+                "dynamodb:Delete*",
+                "dynamodb:PartiQLDelete"
               ],
               "Resource": [
                 {
-                  "Ref": "storagedataStorageArn"
+                  "Ref": "storageplantDataV3Arn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storagedataStorageArn"
+                        "Ref": "storageplantDataV3Arn"
                       },
                       "index/*"
                     ]
