@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "plantDataV3": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

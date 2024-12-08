@@ -1,6 +1,6 @@
 {
   "api": {
-    "api08188476": {
+    "plantDataAPIV3": {
       "dependsOn": [
         {
           "attributes": [
@@ -8,7 +8,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -16,7 +16,8 @@
     }
   },
   "auth": {
-    "plantparent": {
+    "plantprojectfixv3b7916566": {
+      "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
@@ -37,51 +38,69 @@
         ]
       },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito",
-      "serviceType": "managed"
+      "service": "Cognito"
     }
   },
   "function": {
-    "sensorDataHandler": {
+    "plantData": {
       "build": true,
       "dependsOn": [
         {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
           "attributes": [
             "Name",
-            "Arn"
+            "Arn",
+            "StreamArn"
           ],
           "category": "storage",
-          "resourceName": "dataStorage"
+          "resourceName": "plantDataV3"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "type": "cicd"
+    }
+  },
   "parameters": {
-    "AMPLIFY_function_sensorDataHandler_deploymentBucketName": {
+    "AMPLIFY_function_plantData_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
         }
       ]
     },
-    "AMPLIFY_function_sensorDataHandler_s3Key": {
+    "AMPLIFY_function_plantData_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "sensorDataHandler"
+          "resourceName": "plantData"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_amplifyhosting_appId": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_amplifyhosting_type": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
         }
       ]
     }
   },
   "storage": {
-    "dataStorage": {
+    "plantDataV3": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }
