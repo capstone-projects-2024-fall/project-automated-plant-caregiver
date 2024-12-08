@@ -33,7 +33,7 @@
 // CRGB leds[NUM_LEDS];
 
 // // Water pump settings
-// #define WATER_PUMP_PIN 23
+// #define WATER_PUMP_PIN 4
 // #define SOIL_MOISTURE_THRESHOLD 1000
 
 // // Water pump debounce settings
@@ -56,6 +56,20 @@
 //     return std::string(buffer);
 // }
 
+// // Initialize BH1750
+// void initializeBH1750() {
+//     Serial.println("Initializing BH1750");
+//     if (lightsensor.begin(BH1750::CONTINUOUS_LOW_RES_MODE)) {
+//         Serial.println("BH1750 Enabled");
+//     } else {
+//         Serial.println("BH1750 Error");
+        
+//         Serial.println("Restarting...");
+//         delay(3000);
+//         ESP.restart();
+//     }
+// }
+
 // void setup() {
 //     // Initialize Serial at 115200 baud rate
 //     Serial.begin(115200);
@@ -76,11 +90,7 @@
 //     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 
 //     // Initialize BH1750
-//     if (lightsensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
-//         Serial.println("BH1750 Enabled");
-//     } else {
-//         Serial.println("BH1750 Error");
-//     }
+//     initializeBH1750();
 
 //     // Initialize Soil Moisture Sensor
 //     if (!soilSensor.begin(0x36)) {
@@ -151,7 +161,7 @@
     
 //     // Set the color of the LED
 //     for (int i = 0; i < NUM_LEDS; i++) {
-//         leds[i] = CRGB::Blue;
+//         leds[i] = CRGB::Red;
 //     }
 //     FastLED.show();
 
@@ -160,5 +170,5 @@
 //     // Space between readings
 //     Serial.println("--------------------");
 //     // Delay between readings
-//     delay(2000);
+//     delay(1000);
 // }

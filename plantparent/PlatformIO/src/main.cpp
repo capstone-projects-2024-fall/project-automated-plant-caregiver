@@ -23,15 +23,15 @@ TemperatureHumiditySensor tempHumidSensor;
 // Pin Definitions
 #define I2C_SDA 21
 #define I2C_SCL 22
-#define LED_PIN 19
-#define WATER_PUMP_PIN 5
+#define LED_PIN 5
+#define WATER_PUMP_PIN 4
 
 // LED && BRIGHTNESS settings
 #define NUM_LEDS 120
 bool FastLEDInitialized = false;
 CRGB leds[NUM_LEDS];
 int BRIGHTNESS = 5;
-const int BRIGHTNESS_STEP = 5;
+const int BRIGHTNESS_STEP = 25;
 const int MAX_BRIGHTNESS = 255;
 const int MIN_BRIGHTNESS = 0;
 const unsigned long debounceIntervalLight = 5000; // Minimum time between light toggles (5 seconds)
@@ -46,39 +46,44 @@ unsigned long lastPumpToggleTime = 0; // Last time the pump was toggled
 const char* ssid = "Nokia G310";
 const char* password = "17328912";
 
-// NTP Server settings
-const char* ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = -18000;  // UTC-5 (Eastern Standard Time)
-const int daylightOffset_sec = 3600; // US observes DST (adds 1 hour)
 
 // API endpoint URL
-const char* apiUrl = "https://zxk89h80gg.execute-api.us-east-1.amazonaws.com/dev/data";
+const char* apiUrl = "https://so7bglvkza.execute-api.us-east-1.amazonaws.com/dev/sensorDataV2";
 
 // WebServer instance
 WebServer server(80);
 
 // Sensor targets
-int soilSensorTarget = 1000;
-int lightSensorTarget = 100;
+int soilSensorTarget = 200;
+int lightSensorTarget = 200;
 
 // Error number for sensor readings
 const int errorNumber = -999;
 
 // Function to connect to WiFi
 void connectToWiFi() {
+    unsigned long startAttemptTime = millis();
+
     if (WiFi.status() != WL_CONNECTED) {
         Serial.printf("Connecting to %s ", ssid);
         WiFi.begin(ssid, password);
-        while (WiFi.status() != WL_CONNECTED) {
+
+        // Wait for connection with a timeout of 5 seconds
+        while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 5000) {
             delay(500);
             Serial.print(".");
         }
-        Serial.println("CONNECTED");
-        Serial.println("IP Address: " + WiFi.localIP().toString());
+
+        if (WiFi.status() == WL_CONNECTED) {
+            Serial.println(" CONNECTED");
+            Serial.println("IP Address: " + WiFi.localIP().toString());
+        } else {
+            Serial.println("Failed to connect to WiFi. Restarting...");
+            ESP.restart();
+        }
     } else {
         return;
     }
-
 }
 
 // Function to send json data to the API endpoint
@@ -103,7 +108,7 @@ bool sendPostRequest(String jsonPayload) {
 void handleUpdateTarget() {
     if (server.hasArg("plain")) {
         String body = server.arg("plain");
-        StaticJsonDocument<200> doc;
+        DynamicJsonDocument doc(200);
         DeserializationError error = deserializeJson(doc, body);
 
         if (error) {
@@ -115,7 +120,7 @@ void handleUpdateTarget() {
             soilSensorTarget = doc["soilMoistureTarget"];
         }
 
-        if (doc.containsKey("lightTarget")) {
+        if (doc.containsKey("lightSensorTarget")) {
             lightSensorTarget = doc["lightSensorTarget"];
         }
 
@@ -127,14 +132,46 @@ void handleUpdateTarget() {
 
 // Function to initialize sensors
 void initializeSensors() {
+    unsigned long startAttemptTime = millis();
+    unsigned long currentAttemptTime;
+
+    // Initialize Light Sensor
     while (!lightsensor.initialize()) {
-        delay(1000);
+        Serial.println("Retrying to initialize Light Sensor (2s)");
+        delay(2000);
+        currentAttemptTime = millis();
+        if (currentAttemptTime - startAttemptTime > 10000) {
+            Serial.println("Retried 5 times, restarting...");
+            ESP.restart();
+        }
     }
+
+    // Reset startAttemptTime for the next sensor
+    startAttemptTime = millis();
+
+    // Initialize Soil Moisture Sensor
     while (!soilSensor.initialize()) {
-        delay(1000);
+        Serial.println("Retrying to initialize Soil Moisture Sensor (2s)");
+        delay(2000);
+        currentAttemptTime = millis();
+        if (currentAttemptTime - startAttemptTime > 10000) {
+            Serial.println("Retried 5 times, restarting...");
+            ESP.restart();
+        }
     }
+
+    // Reset startAttemptTime for the next sensor
+    startAttemptTime = millis();
+
+    // Initialize Temperature & Humidity Sensor
     while (!tempHumidSensor.initialize()) {
-        delay(1000);
+        Serial.println("Retrying to initialize Temperature & Humidity Sensor (2s)");
+        delay(2000);
+        currentAttemptTime = millis();
+        if (currentAttemptTime - startAttemptTime > 10000) {
+            Serial.println("Retried 5 times, restarting...");
+            ESP.restart();
+        }
     }
 }
 
@@ -164,6 +201,7 @@ bool updateLEDBrightness(int brightness) {
     FastLED.setBrightness(brightness);
     BRIGHTNESS = brightness;
     FastLED.show();
+    Serial.println("Brightness updated to: " + String(brightness));
     return true;
 }
 
@@ -224,16 +262,47 @@ int* getSoilMoistureSensorTargetRange(int soilSensorTarget) {
     return range;
 }
 
-// Get the current time
-std::string getCurrentTime() {
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo)) {
-        Serial.println("Failed to obtain time");
-        return "Failed to obtain time";
+// Set light sensor target to 0
+bool LightSensorSetTo0() {
+    lightSensorTarget = 0;
+    return true;
+}
+bool turnOffLED() {
+    if (updateLEDBrightness(0)) {
+        return true;
+    };
+    return false;
+}
+bool turnOnLED() {
+    if (updateLEDBrightness(50)) {
+        return true;
+    };
+    return false;
+}
+
+void LightSensorTest() {
+    if (lightSensorTarget == lightsensor.readData().lux) {
+        turnOnLED();
+    } else {
+        turnOffLED();
     }
-    char buffer[80];
-    strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", &timeinfo);
-    return std::string(buffer);
+}
+
+void WaterPumpTest() {
+    if (soilSensor.readData().moisture >= 1000) {
+        turnOnWaterPump();
+    }
+}
+// Setup Static IP
+void setupStaticIP() {
+    IPAddress local_IP(192, 168, 114, 184); // Change to your desired static IP
+    IPAddress gateway(192, 168, 114, 226);  // Gateway IP address
+    IPAddress subnet(255, 255, 255, 0);     // Subnet mask
+    IPAddress primaryDNS(8, 8, 8, 8);       // Primary DNS server
+    IPAddress secondaryDNS(8, 8, 4, 4);     // Secondary DNS server (optional)
+    if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+        Serial.println("STA Failed to configure");
+    }
 }
 
 // Setup function
@@ -244,11 +313,11 @@ void setup() {
     // Initialize I2C communication
     Wire.begin(I2C_SDA, I2C_SCL);
 
+    // Setup static IP
+    setupStaticIP();
+
     // Connect to WiFi
     connectToWiFi();
-
-    // Init and get the time
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 
     // Initialize sensors
     initializeSensors();
@@ -256,8 +325,8 @@ void setup() {
     // Initialize FastLED
     FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     fill_solid(leds, NUM_LEDS, CRGB::Blue);
-    updateLEDBrightness(BRIGHTNESS); // Set brightness to 5 (range is 0-255)
     FastLEDInitialized = true;
+    updateLEDBrightness(BRIGHTNESS); // Set brightness to 5 (range is 0-255)
     // Initialize water pump pin
     pinMode(WATER_PUMP_PIN, OUTPUT);
     digitalWrite(WATER_PUMP_PIN, LOW); // Ensure pump is off initially
@@ -288,7 +357,7 @@ void loop() {
         Serial.println("Soil Moisture: " + String(soilmoisturedata.moisture));
         Serial.println("Temperature: " + String(tempHumidData.temperature) + "°C");
         Serial.println("Humidity: " + String(tempHumidData.humidity) + "%");
-        Serial.println("Current Time: " + String(getCurrentTime().c_str()));
+        Serial.println("Current Targets - Soil Moisture: " + String(soilSensorTarget) + ", Light: " + String(lightSensorTarget));
     }
     // Adjust light to target range
     adjustLight(lightsensordata.lux, getLightSensorTargetRange(lightSensorTarget));
@@ -296,19 +365,27 @@ void loop() {
     // Adjust soil moisture to target range
     adjustSoilMoisture(soilmoisturedata.moisture, getSoilMoistureSensorTargetRange(soilSensorTarget));
 
+    // // Test Light Sensor
+    // LightSensorSetTo0();
+    // LightSensorTest();
+    // // Test Water Pump
+    // WaterPumpTest();
+
+
     // Create JSON payload
     String jsonPayload = "{\"lux\": " + String(lightsensordata.lux) 
     + ", \"soil_moisture\": " + String(soilmoisturedata.moisture) 
-    + ", \"temperature\": " + String(tempHumidData.temperature) 
-    + ", \"humidity\": " + String(tempHumidData.humidity) 
-    + ", \"timestamp\": \"" + String(getCurrentTime().c_str()) + "\"}";
-    // Send the POST request
-    if (sendPostRequest(jsonPayload)) {
-        Serial.println("Data sent successfully");
-        Serial.println("Data: " + jsonPayload);
-    } else {
-        Serial.println("Failed to send data");
-    }
+    + ", \"temp\": " + String(tempHumidData.temperature) + "}";
+
+    // // Send data to API endpoint
+    // if (sendPostRequest(jsonPayload)) {
+    //     Serial.println("Data sent successfully");
+    //     Serial.println("Data: " + jsonPayload);
+    // } else {
+    //     Serial.println("Failed to send data");
+    // }
+    // Separator between each loop for better readability
     Serial.println("------------------------------------------------------------");
+    // Delay for 1 second
     delay(1000);
 }
