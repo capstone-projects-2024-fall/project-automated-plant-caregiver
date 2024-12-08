@@ -20,7 +20,7 @@ const Navbar = () => {
             </Link>
             <div className="nav-links">
                 <Link to="/landing">Home</Link>
-                <Link to="/Home">Plant</Link>
+                <Link to="/Home">Plants</Link>
                 <Link to="/about">About</Link>
                 <Link to="/chat">AI Chat</Link>
                 {!isLoggedIn ? (
