@@ -1,13 +1,13 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
-    "api08188476": {
+    "plantDataAPIV3": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
     }
   },
   "auth": {
-    "plantparent": {
+    "plantprojectfixv3b7916566": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -18,7 +18,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "sensorDataHandler": {
+    "plantData": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
@@ -27,12 +27,14 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "dataStorage": {
+    "plantDataV3": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",
       "PartitionKeyType": "string",
       "Region": "string",
+      "SortKeyName": "string",
+      "SortKeyType": "string",
       "StreamArn": "string"
     }
   }

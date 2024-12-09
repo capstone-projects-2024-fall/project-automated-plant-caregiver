@@ -37,6 +37,7 @@ The frontend of the **PlantParent** application is responsible for rendering the
 - **Description**: The navigation bar that is displayed across all pages of the application.
 - **Attributes**:
   - `menuItems: List<String>`: A list of menu items that allow users to navigate between pages.
+  - `UserProfileIcon: List<String>`: The icon for the logged-in user's profile.
 - **Methods**:
   - `renderMenu()`: Renders the navigation menu.
 
