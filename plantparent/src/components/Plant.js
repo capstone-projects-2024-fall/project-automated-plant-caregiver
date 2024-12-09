@@ -21,14 +21,23 @@ const Plant = ({ plantId }) => {
     const [plantImage, setPlantImage] = useState(plantImg); // Default plant image
 
     useEffect(() => {
+        // Initial fetch
         fetchSensorData(setSensorData, setError);
-
+    
         // Load plant data from localStorage
         const storedPlants = JSON.parse(localStorage.getItem('plants')) || {};
         if (storedPlants[plantId]) {
             setPlantName(storedPlants[plantId].name || `Plant ${plantId}`);
             setPlantImage(storedPlants[plantId].image || plantImg);
         }
+    
+        // Set up interval to refetch sensor data every 5 seconds
+        const intervalId = setInterval(() => {
+            fetchSensorData(setSensorData, setError);
+        }, 5000);
+    
+        // Cleanup interval when component unmounts or plantId changes
+        return () => clearInterval(intervalId);
     }, [plantId]);
 
     const handleImageChange = (e) => {
@@ -181,12 +190,20 @@ const Plant = ({ plantId }) => {
                     ) : (
                         <h3 onClick={() => setIsEditingName(true)}>{plantName}</h3>
                     )}
-                    {error ? <p>{error}</p> : (
-                        <>
-                            <p>Light Level: {sensorData.lux ?? 'Loading...'} lux</p>
-                            <p>Soil Moisture: {sensorData.soil_moisture ?? 'Loading...'}</p>
-                            <p>Temperature: {sensorData.temp ?? 'Loading...'} °C</p>
-                        </>
+                     {error ? <p>{error}</p> : (
+                    plantId === 1 ? (
+                     <>
+                        <p>Light Level: {sensorData.lux ?? 'Loading...'} lux</p>
+                        <p>Soil Moisture: {sensorData.soil_moisture ?? 'Loading...'}</p>
+                        <p>Temperature: {sensorData.temp ?? 'Loading...'} °C</p>
+                    </>
+                     ) : (
+                    <>
+                        <p>Light Level: 0 lux</p>
+                        <p>Soil Moisture: 0</p>
+                        <p>Temperature: 0 °C</p>
+                    </>
+                    )
                     )}
                 </div>
 
