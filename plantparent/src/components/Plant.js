@@ -34,7 +34,7 @@ const Plant = ({ plantId }) => {
         // Set up interval to refetch sensor data every 5 seconds
         const intervalId = setInterval(() => {
             fetchSensorData(setSensorData, setError);
-        }, 5000);
+        }, 1000);
     
         // Cleanup interval when component unmounts or plantId changes
         return () => clearInterval(intervalId);
