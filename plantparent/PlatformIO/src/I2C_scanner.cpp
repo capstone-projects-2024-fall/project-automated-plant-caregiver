@@ -40,6 +40,16 @@
 //       Serial.print(address, HEX);
 //       Serial.println("  !");
 //       nDevices++;
+
+//       // Check if the device is AM2320 by attempting to read from it
+//       if (address == 0x5C) {
+//         Adafruit_AM2320 tempHumidSensor;
+//         if (tempHumidSensor.begin()) {
+//           Serial.println("Confirmed AM2320 sensor detected at address 0x5C");
+//         } else {
+//           Serial.println("Device at address 0x5C is not an AM2320 sensor");
+//         }
+//       }
 //     } else if (error == 4) {
 //       Serial.print("Unknown error at address 0x");
 //       if (address < 16)

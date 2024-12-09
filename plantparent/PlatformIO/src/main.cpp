@@ -15,10 +15,10 @@
 #include "SoilMoistureSensor.h"
 #include "TemperatureHumiditySensor.h"
 
-// Initialize Instances of Sensors
-LightSensor lightsensor;
-SoilMoistureSensor soilSensor(0x36);
-TemperatureHumiditySensor tempHumidSensor;
+// Initialize Instances of Sensors with I2C addresses
+LightSensor lightsensor(0x23); // Address for BH1750
+SoilMoistureSensor soilSensor(0x36); // Address for Soil Moisture Sensor
+TemperatureHumiditySensor tempHumidSensor; // Address for AM2320
 
 // Pin Definitions
 #define I2C_SDA 21
@@ -45,7 +45,6 @@ unsigned long lastPumpToggleTime = 0; // Last time the pump was toggled
 // WiFi credentials
 const char* ssid = "Nokia G310";
 const char* password = "17328912";
-
 
 // API endpoint URL
 const char* apiUrl = "https://so7bglvkza.execute-api.us-east-1.amazonaws.com/dev/sensorDataV2";
@@ -104,6 +103,7 @@ bool sendPostRequest(String jsonPayload) {
         return false;
     }
 }
+
 // Function to handle updating sensor targets
 void handleUpdateTarget() {
     if (server.hasArg("plain")) {
@@ -221,7 +221,6 @@ void adjustLight(int lightSensorReading, int* TargetRange) {
     }
 }
 
-
 // Function to get the light sensor target range
 int* getLightSensorTargetRange(int lightSensorTarget) {
     static int range[2];
@@ -230,6 +229,7 @@ int* getLightSensorTargetRange(int lightSensorTarget) {
     range[1] = std::min(65535, lightSensorTarget + rangeOffset);
     return range;
 }
+
 // Turn the water pump on with debounce
 void turnOnWaterPump() {
     unsigned long currentMillis = millis();
@@ -241,6 +241,7 @@ void turnOnWaterPump() {
         Serial.println("Water Pump Gave Some Water");
     }
 }
+
 // Adjust Soil Moisture based on Soil Moisture readings
 void adjustSoilMoisture(int soilMoistureReading, int* TargetRange) {
     if (soilMoistureReading >= TargetRange[0] && soilMoistureReading <= TargetRange[1]) {
@@ -250,8 +251,6 @@ void adjustSoilMoisture(int soilMoistureReading, int* TargetRange) {
         turnOnWaterPump();
     }
 }
-
-
 
 // Function to get the soil moisture sensor target range
 int* getSoilMoistureSensorTargetRange(int soilSensorTarget) {
@@ -267,12 +266,14 @@ bool LightSensorSetTo0() {
     lightSensorTarget = 0;
     return true;
 }
+
 bool turnOffLED() {
     if (updateLEDBrightness(0)) {
         return true;
     };
     return false;
 }
+
 bool turnOnLED() {
     if (updateLEDBrightness(50)) {
         return true;
@@ -293,6 +294,7 @@ void WaterPumpTest() {
         turnOnWaterPump();
     }
 }
+
 // Setup Static IP
 void setupStaticIP() {
     IPAddress local_IP(192, 168, 114, 184); // Change to your desired static IP
@@ -371,19 +373,18 @@ void loop() {
     // // Test Water Pump
     // WaterPumpTest();
 
-
     // Create JSON payload
     String jsonPayload = "{\"lux\": " + String(lightsensordata.lux) 
     + ", \"soil_moisture\": " + String(soilmoisturedata.moisture) 
     + ", \"temp\": " + String(tempHumidData.temperature) + "}";
 
-    // // Send data to API endpoint
-    // if (sendPostRequest(jsonPayload)) {
-    //     Serial.println("Data sent successfully");
-    //     Serial.println("Data: " + jsonPayload);
-    // } else {
-    //     Serial.println("Failed to send data");
-    // }
+    // Send data to API endpoint
+    if (sendPostRequest(jsonPayload)) {
+        Serial.println("Data sent successfully");
+        Serial.println("Data: " + jsonPayload);
+    } else {
+        Serial.println("Failed to send data");
+    }
     // Separator between each loop for better readability
     Serial.println("------------------------------------------------------------");
     // Delay for 1 second

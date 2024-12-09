@@ -1,7 +1,9 @@
 #include "LightSensor.h"
 
 bool LightSensor::initialize() {
-    if (sensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+    Serial.print("Initializing BH1750 at address 0x");
+    Serial.println(address, HEX);
+    if (sensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, address, &Wire)) {
         Serial.println("Light Sensor Initialized");
         return true;
     } else {
