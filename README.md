@@ -66,4 +66,7 @@ This project will compare existing open-source projects, like the OpenAg initiat
   ![image](https://github.com/user-attachments/assets/2ffb84e7-91e7-4f8f-8de5-cb50ba40f146)
 
 
+## Current Deployment
+The web application is currently hosted by AWS Amplify. Access to the website can be found through the link below:
+https://main.dl7s274dvx0k2.amplifyapp.com/
 
